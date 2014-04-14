@@ -1,0 +1,13 @@
+..\..\lib\guival.o: ..\ucGUI\Core\GUIVal.c
+..\..\lib\guival.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\guival.o: ..\ucGUI\Core\GUI.h
+..\..\lib\guival.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\guival.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\guival.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\guival.o: ..\ucGUI\Core\LCD.h
+..\..\lib\guival.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\guival.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\guival.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\guival.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\guival.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\guival.o: G:\TX\ARM\ARMCC\bin\..\include\string.h

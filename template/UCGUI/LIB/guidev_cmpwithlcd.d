@@ -1,0 +1,17 @@
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\MemDev\GUIDEV_CmpWithLCD.c
+..\..\lib\guidev_cmpwithlcd.o: G:\TX\ARM\ARMCC\bin\..\include\string.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\GUI_Private.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\GUI.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\LCD.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\LCD_Private.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Core\LCD_ConfDefaults.h
+..\..\lib\guidev_cmpwithlcd.o: ..\ucGUI\Config\LCDConf.h

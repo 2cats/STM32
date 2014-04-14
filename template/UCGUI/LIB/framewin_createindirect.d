@@ -1,0 +1,9 @@
+..\..\lib\framewin_createindirect.o: ..\ucGUI\Widget\FRAMEWIN_CreateIndirect.c
+..\..\lib\framewin_createindirect.o: ..\ucGUI\Widget\FRAMEWIN.h
+..\..\lib\framewin_createindirect.o: ..\ucGUI\WM\WM.h
+..\..\lib\framewin_createindirect.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\framewin_createindirect.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\framewin_createindirect.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\framewin_createindirect.o: ..\ucGUI\Core\LCD.h
+..\..\lib\framewin_createindirect.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\framewin_createindirect.o: ..\ucGUI\Widget\DIALOG_Intern.h

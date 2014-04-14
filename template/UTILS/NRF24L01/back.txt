@@ -1,0 +1,26 @@
+#include "ADCManager.h"
+#include "JLX12864G.h"
+#include "millis.h"
+ADCManagerTypeDef ADCManager;
+u32 sampleTime=10,time;
+u8 GUIbuf[128];
+void updateGUI(u8 x,u8 y)
+{
+	GUI_SetDrawMode(GUI_DRAWMODE_XOR);
+	GUI_DrawPixel(x-2,GUIbuf[x-2]);
+}
+int main()
+{
+	uint8_t Channels[]={ADC_Channel_0};
+	GUI_Init();
+	MILLIS_Init();
+	ADCMANAGER_ALL_INIT(ADCManager,Channels,1);
+	ADCManager.startTransfer();
+	while(1)
+	{
+		if(millis()-time>sampleTime)
+		{
+			
+		}
+	}
+}

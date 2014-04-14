@@ -1,0 +1,13 @@
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\MemDev\GUIDEV_ReduceYSize.c
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\Core\GUI.h
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\Core\LCD.h
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\guidev_reduceysize.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\guidev_reduceysize.o: G:\TX\ARM\ARMCC\bin\..\include\string.h

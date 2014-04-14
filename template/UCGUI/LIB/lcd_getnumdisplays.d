@@ -1,0 +1,12 @@
+..\..\lib\lcd_getnumdisplays.o: ..\ucGUI\Core\LCD_GetNumDisplays.c
+..\..\lib\lcd_getnumdisplays.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\lcd_getnumdisplays.o: ..\ucGUI\Core\LCD.h
+..\..\lib\lcd_getnumdisplays.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\lcd_getnumdisplays.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\lcd_getnumdisplays.o: ..\ucGUI\Core\LCD_Private.h
+..\..\lib\lcd_getnumdisplays.o: ..\ucGUI\Core\LCD_ConfDefaults.h
+..\..\lib\lcd_getnumdisplays.o: ..\ucGUI\Config\LCDConf.h
+..\..\lib\lcd_getnumdisplays.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\lcd_getnumdisplays.o: ..\ucGUI\Core\GUI.h
+..\..\lib\lcd_getnumdisplays.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\lcd_getnumdisplays.o: ..\ucGUI\Core\GUIVersion.h

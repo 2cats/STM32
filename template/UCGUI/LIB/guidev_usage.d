@@ -1,0 +1,13 @@
+..\..\lib\guidev_usage.o: ..\ucGUI\MemDev\GUIDEV_Usage.c
+..\..\lib\guidev_usage.o: G:\TX\ARM\ARMCC\bin\..\include\string.h
+..\..\lib\guidev_usage.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\guidev_usage.o: ..\ucGUI\Core\GUI.h
+..\..\lib\guidev_usage.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\guidev_usage.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\guidev_usage.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\guidev_usage.o: ..\ucGUI\Core\LCD.h
+..\..\lib\guidev_usage.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\guidev_usage.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\guidev_usage.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\guidev_usage.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\guidev_usage.o: ..\ucGUI\WM\WM_GUI.h

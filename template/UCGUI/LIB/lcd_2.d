@@ -1,0 +1,12 @@
+..\..\lib\lcd_2.o: ..\ucGUI\MultiLayer\LCD_2.c
+..\..\lib\lcd_2.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\lcd_2.o: ..\ucGUI\Core\LCD_Private.h
+..\..\lib\lcd_2.o: ..\ucGUI\Core\LCD_ConfDefaults.h
+..\..\lib\lcd_2.o: ..\ucGUI\Config\LCDConf.h
+..\..\lib\lcd_2.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\lcd_2.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\lcd_2.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\lcd_2.o: ..\ucGUI\Core\LCD.h
+..\..\lib\lcd_2.o: ..\ucGUI\Core\GUI.h
+..\..\lib\lcd_2.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\lcd_2.o: ..\ucGUI\Core\GUIVersion.h

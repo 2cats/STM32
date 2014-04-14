@@ -1,0 +1,11 @@
+..\..\lib\radio_createindirect.o: ..\ucGUI\Widget\RADIO_CreateIndirect.c
+..\..\lib\radio_createindirect.o: ..\ucGUI\Core\GUI.h
+..\..\lib\radio_createindirect.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\radio_createindirect.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\radio_createindirect.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\radio_createindirect.o: ..\ucGUI\Core\LCD.h
+..\..\lib\radio_createindirect.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\radio_createindirect.o: ..\ucGUI\Widget\RADIO.h
+..\..\lib\radio_createindirect.o: ..\ucGUI\WM\WM.h
+..\..\lib\radio_createindirect.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\radio_createindirect.o: ..\ucGUI\Widget\DIALOG_Intern.h

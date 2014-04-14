@@ -1,0 +1,17 @@
+..\..\lib\lcdaa.o: ..\ucGUI\Core\LCDAA.c
+..\..\lib\lcdaa.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\LCD.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\lcdaa.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\GUI_Private.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\GUI.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\lcdaa.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\LCD_Private.h
+..\..\lib\lcdaa.o: ..\ucGUI\Core\LCD_ConfDefaults.h
+..\..\lib\lcdaa.o: ..\ucGUI\Config\LCDConf.h

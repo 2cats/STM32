@@ -1,0 +1,17 @@
+..\..\lib\guicirc.o: ..\ucGUI\Core\GUICirc.c
+..\..\lib\guicirc.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\GUI_Private.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\GUI.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\guicirc.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\LCD.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\guicirc.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\LCD_Private.h
+..\..\lib\guicirc.o: ..\ucGUI\Core\LCD_ConfDefaults.h
+..\..\lib\guicirc.o: ..\ucGUI\Config\LCDConf.h

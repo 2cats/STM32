@@ -1,0 +1,12 @@
+..\..\lib\gui__addspacehex.o: ..\ucGUI\Core\GUI__AddSpaceHex.c
+..\..\lib\gui__addspacehex.o: ..\ucGUI\Core\GUI.h
+..\..\lib\gui__addspacehex.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\gui__addspacehex.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\gui__addspacehex.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\gui__addspacehex.o: ..\ucGUI\Core\LCD.h
+..\..\lib\gui__addspacehex.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\gui__addspacehex.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\gui__addspacehex.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\gui__addspacehex.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\gui__addspacehex.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\gui__addspacehex.o: ..\ucGUI\WM\WM_GUI.h

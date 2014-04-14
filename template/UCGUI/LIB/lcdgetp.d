@@ -1,0 +1,17 @@
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\LCDGetP.c
+..\..\lib\lcdgetp.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\GUI_Private.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\GUI.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\LCD.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\lcdgetp.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\LCD_Private.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Core\LCD_ConfDefaults.h
+..\..\lib\lcdgetp.o: ..\ucGUI\Config\LCDConf.h

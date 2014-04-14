@@ -1,0 +1,13 @@
+..\..\lib\gui__strcmp.o: ..\ucGUI\Core\GUI__strcmp.c
+..\..\lib\gui__strcmp.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\gui__strcmp.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\gui__strcmp.o: ..\ucGUI\Core\GUI.h
+..\..\lib\gui__strcmp.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\gui__strcmp.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\gui__strcmp.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\gui__strcmp.o: ..\ucGUI\Core\LCD.h
+..\..\lib\gui__strcmp.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\gui__strcmp.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\gui__strcmp.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\gui__strcmp.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\gui__strcmp.o: ..\ucGUI\WM\WM_GUI.h

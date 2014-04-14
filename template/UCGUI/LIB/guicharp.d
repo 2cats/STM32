@@ -1,0 +1,17 @@
+..\..\lib\guicharp.o: ..\ucGUI\Core\GUICharP.c
+..\..\lib\guicharp.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\GUI_Private.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\GUI.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\guicharp.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\LCD.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\guicharp.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\LCD_Private.h
+..\..\lib\guicharp.o: ..\ucGUI\Core\LCD_ConfDefaults.h
+..\..\lib\guicharp.o: ..\ucGUI\Config\LCDConf.h

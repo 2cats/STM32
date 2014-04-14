@@ -1,0 +1,18 @@
+#include "24l01.h"
+u8 tmp_buf[33];		 
+int main()
+{
+	NRF24L01_Init();  
+	while(NRF24L01_Check())	//检查NRF24L01是否在位.	
+	{
+		tmp_buf[32]=0;
+	}
+	NRF24L01_RX_Mode();	
+	while(1)
+	{
+		if(NRF24L01_RxPacket(tmp_buf)==0)//一旦接收到信息,则显示出来.
+		{
+			tmp_buf[32]=0;
+		}	
+	}
+}

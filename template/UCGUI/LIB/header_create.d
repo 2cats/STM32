@@ -1,0 +1,11 @@
+..\..\lib\header_create.o: ..\ucGUI\Widget\HEADER_Create.c
+..\..\lib\header_create.o: ..\ucGUI\Widget\HEADER.h
+..\..\lib\header_create.o: ..\ucGUI\Core\GUI.h
+..\..\lib\header_create.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\header_create.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\header_create.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\header_create.o: ..\ucGUI\Core\LCD.h
+..\..\lib\header_create.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\header_create.o: ..\ucGUI\WM\WM.h
+..\..\lib\header_create.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\header_create.o: ..\ucGUI\Widget\DIALOG_Intern.h

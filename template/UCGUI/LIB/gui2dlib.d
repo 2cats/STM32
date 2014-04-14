@@ -1,0 +1,13 @@
+..\..\lib\gui2dlib.o: ..\ucGUI\Core\GUI2DLib.c
+..\..\lib\gui2dlib.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\gui2dlib.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\gui2dlib.o: ..\ucGUI\Core\GUI.h
+..\..\lib\gui2dlib.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\gui2dlib.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\gui2dlib.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\gui2dlib.o: ..\ucGUI\Core\LCD.h
+..\..\lib\gui2dlib.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\gui2dlib.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\gui2dlib.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\gui2dlib.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\gui2dlib.o: ..\ucGUI\WM\WM_GUI.h

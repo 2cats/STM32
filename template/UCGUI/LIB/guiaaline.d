@@ -1,0 +1,13 @@
+..\..\lib\guiaaline.o: ..\ucGUI\AntiAlias\GUIAALine.c
+..\..\lib\guiaaline.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\guiaaline.o: ..\ucGUI\Core\GUI.h
+..\..\lib\guiaaline.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\guiaaline.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\guiaaline.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\guiaaline.o: ..\ucGUI\Core\LCD.h
+..\..\lib\guiaaline.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\guiaaline.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\guiaaline.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\guiaaline.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\guiaaline.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\guiaaline.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h

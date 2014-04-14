@@ -1,0 +1,12 @@
+..\..\lib\lcd_getex.o: ..\ucGUI\Core\LCD_GetEx.c
+..\..\lib\lcd_getex.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\lcd_getex.o: ..\ucGUI\Core\LCD.h
+..\..\lib\lcd_getex.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\lcd_getex.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\lcd_getex.o: ..\ucGUI\Core\LCD_Private.h
+..\..\lib\lcd_getex.o: ..\ucGUI\Core\LCD_ConfDefaults.h
+..\..\lib\lcd_getex.o: ..\ucGUI\Config\LCDConf.h
+..\..\lib\lcd_getex.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\lcd_getex.o: ..\ucGUI\Core\GUI.h
+..\..\lib\lcd_getex.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\lcd_getex.o: ..\ucGUI\Core\GUIVersion.h

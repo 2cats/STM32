@@ -1,0 +1,16 @@
+..\..\lib\guiaaarc.o: ..\ucGUI\AntiAlias\GUIAAArc.c
+..\..\lib\guiaaarc.o: G:\TX\ARM\ARMCC\bin\..\include\stdio.h
+..\..\lib\guiaaarc.o: G:\TX\ARM\ARMCC\bin\..\include\stdlib.h
+..\..\lib\guiaaarc.o: G:\TX\ARM\ARMCC\bin\..\include\string.h
+..\..\lib\guiaaarc.o: G:\TX\ARM\ARMCC\bin\..\include\math.h
+..\..\lib\guiaaarc.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\guiaaarc.o: ..\ucGUI\Core\GUI.h
+..\..\lib\guiaaarc.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\guiaaarc.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\guiaaarc.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\guiaaarc.o: ..\ucGUI\Core\LCD.h
+..\..\lib\guiaaarc.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\guiaaarc.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\guiaaarc.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\guiaaarc.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\guiaaarc.o: ..\ucGUI\WM\WM_GUI.h

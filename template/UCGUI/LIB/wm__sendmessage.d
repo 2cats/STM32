@@ -1,0 +1,15 @@
+..\..\lib\wm__sendmessage.o: ..\ucGUI\WM\WM__SendMessage.c
+..\..\lib\wm__sendmessage.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\WM\WM_Intern.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\WM\WM.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\Core\LCD.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\Core\GUI.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\wm__sendmessage.o: ..\ucGUI\Core\GUI_X.h

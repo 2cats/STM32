@@ -1,0 +1,1010 @@
+// I2C库-- MPU6050 I2C设备类
+// 基于InvenSense 的MPU-6050寄存器映射文件，其版本为2.0、5/19/2011 (RM-MPU-6000A-00)
+// 作者Jeff Rowberg写于2011年8月24日 jeff@rowberg.net
+// 可在网站https://github.com/jrowberg/i2cdevlib上获取更新信息
+//
+// 更新：
+//     ... 正在调试的版本
+
+// 注意: 这只是一个不完整的版本。这个设备类目前正在积极地发展,但是仍不完善。如果你决定使用这个代码，请牢记这一点。
+
+/* ============================================
+I2C设备库代码已获MIT授权
+
+特此授予许可，只要遵循以下条例者，皆可免费复制此软件及相关文件，并可自由使用、复制、合并、出版、发布、转授许可或出售：
+
+所有副本和实质性内容都应包括上述版权和许可声明。
+
+该软件不提供任何明示或暗示的保证，以软件“现状”出售。该软件包括但不限于适销性的保证，适用于特殊目的和非侵权活动。作者或版权持有者在任何情况下都无需对软件负责，无论是合同的签订、侵权行为或其它与该软件有关的活动和交易。
+===============================================
+*/
+
+#include "MPU6050.h"
+
+/*
+ * 默认的函数结构,使用默认的I2C地址。
+ * 请参考MPU6050_DEFAULT_ADDRESS字段
+ */
+MPU6050::MPU6050() {
+    devAddr = MPU6050_DEFAULT_ADDRESS;
+}
+
+/*
+ * 特殊地址的函数结构。
+ * I2C地址参数
+ * 请参考MPU6050_DEFAULT_ADDRESS字段
+ * 请参考MPU6050_ADDRESS_AD0_LOW字段
+ * 请参考MPU6050_ADDRESS_AD0_HIGH字段
+ */
+MPU6050::MPU6050(uint8_t address) {
+    devAddr = address;
+}
+
+/*
+ * 开机并调试。
+ * 这将激活设备,结束其睡眠模式(必须在完成启动后)。同时，这个函数将加速度传感器和陀螺仪设置为最灵敏模式，即+ / - 2 g和+ / - 250度/秒; 并把X陀螺仪设置为时钟源的参考，这比默认的内部时钟源要准确。
+ */
+void MPU6050::initialize() {
+    setClockSource(MPU6050_CLOCK_PLL_XGYRO);
+    setFullScaleGyroRange(MPU6050_GYRO_FS_250);
+    setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
+    setSleepEnabled(false); // 多亏了Jack Elston指出了这一点
+}
+
+/*
+ * 验证I2C接口。
+ * 确保装置正确连接并反应正常。
+ * 如果连接有效，返回True；否则返回false
+ */
+bool MPU6050::testConnection() {
+    return getDeviceID() == 0x34;
+}
+
+// AUX_VDDIO寄存器(InvenSense演示代码调用这个RA_*G_OFFS_TC)
+
+/*
+ * 获取I2C辅助电源电压。
+ * 当设置为1,辅助I2C总线高电平是VDD。当电压为0,辅助I2C总线高电平是VLOGIC。这并不适用于MPU-6000,因为它没有VLOGIC端口。
+ * 返回I2C电源电压 (0 = VLOGIC,1 = VDD)
+ */
+uint8_t MPU6050::getAuxVDDIOLevel() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_YG_OFFS_TC, MPU6050_TC_PWR_MODE_BIT, buffer);
+    return buffer[0];
+}
+/*
+ * 设置I2C辅助电源电压。
+ * 当设置为1时,辅助I2C总线高电平是VDD。当设置为0时,辅助I2C总线高电平是VLOGIC。这并不适用于MPU-6000,因为它没有VLOGIC端口。
+ * param level I2C电源电压(0 = VLOGIC,1 = VDD)
+*/
+void MPU6050::setAuxVDDIOLevel(uint8_t level) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_YG_OFFS_TC, MPU6050_TC_PWR_MODE_BIT, level);
+}
+
+// SMPLRT_DIV寄存器
+
+/*获取陀螺仪输出频率间隔
+ *
+ * 传感器的寄存器输出,FIFO输出,DMP采样、运动检测、零运动检测和自由落体检测都是基于采样率。通过SMPLRT_DIV把陀螺仪输出率分频即可得到采样率
+ *
+ * 采样率=陀螺仪输出率/ (1 + SMPLRT_DIV)
+ *
+ * 其中，在禁用DLPF的情况下(DLPF_CFG = 0或7) ，陀螺仪输出率= 8 khz；在启用DLPF(见寄存器26)时，陀螺仪输出率= 1 khz。
+ *
+ * 注意:加速度传感器输出率是1 khz。这意味着,采样率大于1 khz时,同一个加速度传感器的样品可能会多次输入到FIFO、DMP和传感器寄存器。
+ *
+ * 陀螺仪和加速度传感器的信号路径图,请参见第八节的MPU-6000/MPU-6050产品规格文档。
+ *
+ * 返回电流采样率
+ *
+ * 请参见MPU6050_RA_SMPLRT_DIV字段
+ */
+uint8_t MPU6050::getRate() {
+    I2Cdev::readByte(devAddr, MPU6050_RA_SMPLRT_DIV, buffer);
+    return buffer[0];
+}
+/*
+ * 设定陀螺仪采样频率间隔。
+ * 新采样频率间隔参数
+ * 请参见getRate()字段
+ * 请参见MPU6050_RA_SMPLRT_DIV字段
+ */
+void MPU6050::setRate(uint8_t rate) {
+    I2Cdev::writeByte(devAddr, MPU6050_RA_SMPLRT_DIV, rate);
+}
+
+// 配置寄存器
+
+/*
+ * 获取FSYNC函数外接配置
+ * 配置连接到FSYNC端口进行采样。一个连接到FSYNC端口的外部信号可以通过配置EXT_SYNC_SET来采样。为了捕获短频闪光，我们将FSYNC端口的信号变化关闭。我们在寄存器25中定义，由关闭的FSYNC端口信号变化采样而来的数据为采样率。采样完毕后, 锁存器将重置为当前的FSYNC信号状态。
+ *
+ * 根据下表所示的EXT_SYNC_SET值，我们将所得采样值的最低有效位输入传感器数据寄存器中。
+ *
+ * 
+ * EXT_SYNC_SET | FSYNC Bit Location
+ * -------------+-------------------
+ * 0            | Input disabled
+ * 1            | TEMP_OUT_L[0]
+ * 2            | GYRO_XOUT_L[0]
+ * 3            | GYRO_YOUT_L[0]
+ * 4            | GYRO_ZOUT_L[0]
+ * 5            | ACCEL_XOUT_L[0]
+ * 6            | ACCEL_YOUT_L[0]
+ * 7            | ACCEL_ZOUT_L[0]
+ * 
+
+ *
+ * 返回FSYNC配置值
+ */
+uint8_t MPU6050::getExternalFrameSync() {
+    I2Cdev::readBits(devAddr, MPU6050_RA_CONFIG, MPU6050_CFG_EXT_SYNC_SET_BIT, MPU6050_CFG_EXT_SYNC_SET_LENGTH, buffer);
+    return buffer[0];
+}
+/*
+ * 设定FSYNC函数外接配置
+ * 请参见getExternalFrameSync()字段
+ * 请参见MPU6050_RA_CONFIG字段
+ * 新FSYNC配置的同步参数
+ */
+void MPU6050::setExternalFrameSync(uint8_t sync) {
+    I2Cdev::writeBits(devAddr, MPU6050_RA_CONFIG, MPU6050_CFG_EXT_SYNC_SET_BIT, MPU6050_CFG_EXT_SYNC_SET_LENGTH, sync);
+}
+/*
+ * 获取数字低通滤波器的配置
+ *
+ * DLPF_CFG参数设置了数字低通滤波器的配置。同时，通过下表所示的设备，DLPF_CFG参数决定了内部采样率。
+ *
+ * 注意:加速度传感器输出率是1 khz。这意味着,采样率大于1 khz时,同一个加速度传感器的样品可能会多次输入到FIFO、DMP和传感器寄存器。
+ *
+ * 
+ *          |   加速度传感器     |             陀螺仪
+ * DLPF_CFG |    带宽   |  延迟  |    带宽   |  延迟  | 采样率
+ * ---------+-----------+--------+-----------+--------+-------------
+ * 0        | 260Hz     | 0ms    | 256Hz     | 0.98ms | 8kHz
+ * 1        | 184Hz     | 2.0ms  | 188Hz     | 1.9ms  | 1kHz
+ * 2        | 94Hz      | 3.0ms  | 98Hz      | 2.8ms  | 1kHz
+ * 3        | 44Hz      | 4.9ms  | 42Hz      | 4.8ms  | 1kHz
+ * 4        | 21Hz      | 8.5ms  | 20Hz      | 8.3ms  | 1kHz
+ * 5        | 10Hz      | 13.8ms | 10Hz      | 13.4ms | 1kHz
+ * 6        | 5Hz       | 19.0ms | 5Hz       | 18.6ms | 1kHz
+ * 7        |   -- Reserved --   |   -- Reserved --   | Reserved
+ * 
+
+ *
+ * 请参见MPU6050_RA_CONFIG字段
+ * 请参见MPU6050_CFG_DLPF_CFG_BIT字段
+ * 请参见MPU6050_CFG_DLPF_CFG_LENGTH字段
+ */
+uint8_t MPU6050::getDLPFMode() {
+    I2Cdev::readBits(devAddr, MPU6050_RA_CONFIG, MPU6050_CFG_DLPF_CFG_BIT, MPU6050_CFG_DLPF_CFG_LENGTH, buffer);
+    return buffer[0];
+}
+/*
+ * 设定数字低通滤波器的配置.
+ * @新DLFP配置的模式参数
+ * @请参见getDLPFBandwidth()字段
+ * @请参见MPU6050_DLPF_BW_256字段
+ * @请参见MPU6050_RA_CONFIG字段
+ * @请参见MPU6050_CFG_DLPF_CFG_BIT字段
+ * @请参见MPU6050_CFG_DLPF_CFG_LENGTH字段
+ */
+void MPU6050::setDLPFMode(uint8_t mode) {
+    I2Cdev::writeBits(devAddr, MPU6050_RA_CONFIG, MPU6050_CFG_DLPF_CFG_BIT, MPU6050_CFG_DLPF_CFG_LENGTH, mode);
+}
+
+// 陀螺仪配置寄存器
+
+/*
+ * 获取全量程的陀螺仪范围。
+ * 如下表所示，FS_SEL参数允许将陀螺仪传感器的范围设置为全量程。
+ *
+ * 
+ * 0 = +/- 250 度/秒
+ * 1 = +/- 500 度/秒
+ * 2 = +/- 1000 度/秒
+ * 3 = +/- 2000 度/秒
+ * 
+
+ *
+ * @返回当前陀螺仪范围的全量程设置
+ * @请参见MPU6050_GYRO_FS_250字段
+ * @请参见MPU6050_RA_GYRO_CONFIG字段
+ * @请参见MPU6050_GCONFIG_FS_SEL_BIT字段
+ * @请参见MPU6050_GCONFIG_FS_SEL_LENGTH字段
+ */
+uint8_t MPU6050::getFullScaleGyroRange() {
+    I2Cdev::readBits(devAddr, MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, buffer);
+    return buffer[0];
+}
+/*
+ * 设定全量程的陀螺仪范围.
+ * @全量程的陀螺仪范围参数
+ * @请参见getFullScaleRange()字段
+ * @请参见MPU6050_GYRO_FS_250字段
+ * @请参见MPU6050_RA_GYRO_CONFIG字段
+ * @请参见MPU6050_GCONFIG_FS_SEL_BIT字段
+ * @请参见MPU6050_GCONFIG_FS_SEL_LENGTH字段
+ */
+void MPU6050::setFullScaleGyroRange(uint8_t range) {
+    I2Cdev::writeBits(devAddr, MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, range);
+}
+
+// 加速度器配置寄存器
+
+/*
+ * 开启加速度器X轴的安全自测功能。
+ * @返回测试值
+ * @请参见MPU6050_RA_ACCEL_CONFIG字段
+ */
+bool MPU6050::getAccelXSelfTest() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_XA_ST_BIT, buffer);
+    return buffer[0];
+}
+/*
+ * 开启加速度器X轴的安全自测功能。
+ * @安全自测启用参数
+ * @请参见MPU6050_RA_ACCEL_CONFIG字段
+ */
+void MPU6050::setAccelXSelfTest(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_XA_ST_BIT, enabled);
+}
+/* 
+ * 开启加速度器Y轴的安全自测功能。
+ * @返回测试值
+ * @请参见MPU6050_RA_ACCEL_CONFIG字段
+ */
+bool MPU6050::getAccelYSelfTest() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_YA_ST_BIT, buffer);
+    return buffer[0];
+}
+/* 
+ * 开启加速度器Y轴的安全自测功能。
+ * @安全自测启用参数
+ * @请参见MPU6050_RA_ACCEL_CONFIG字段
+ */
+void MPU6050::setAccelYSelfTest(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_YA_ST_BIT, enabled);
+}
+/* 
+ * 开启加速度器Z轴的安全自测功能。
+ * @返回测试值
+ * @请参见MPU6050_RA_ACCEL_CONFIG字段
+ */
+bool MPU6050::getAccelZSelfTest() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_ZA_ST_BIT, buffer);
+    return buffer[0];
+}
+/*
+ * 开启加速度器Z轴的安全自测功能。
+ * @安全自测启用参数
+ * @请参见MPU6050_RA_ACCEL_CONFIG字段
+ */
+void MPU6050::setAccelZSelfTest(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_ZA_ST_BIT, enabled);
+}
+/*
+ * 获取全量程的加速度计范围.
+ * 如下表所示，FS_SEL参数允许将加速度传感器的范围设置为全量程。
+ *
+ * 
+ * 0 = +/- 2g
+ * 1 = +/- 4g
+ * 2 = +/- 8g
+ * 3 = +/- 16g
+ * 
+
+ *
+ * @返回当前加速度传感器范围的全量程设置
+ * @请参见MPU6050_ACCEL_FS_2字段
+ * @请参见MPU6050_RA_ACCEL_CONFIG字段
+ * @请参见MPU6050_ACONFIG_AFS_SEL_BIT字段
+ * @请参见MPU6050_ACONFIG_AFS_SEL_LENGTH字段
+ */
+uint8_t MPU6050::getFullScaleAccelRange() {
+    I2Cdev::readBits(devAddr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, buffer);
+    return buffer[0];
+}
+/*
+ * 设定全量程的加速度计范围
+ * @全量程的加速度范围参数
+ * @请参见getFullScaleAccelRange()字段
+ */
+void MPU6050::setFullScaleAccelRange(uint8_t range) {
+    I2Cdev::writeBits(devAddr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, range);
+}
+/*
+ * 获取高通滤波器的配置.
+ * DHPF是在路径中连接于运动探测器(自由落体,运动阈值,零运动)的一个滤波器模块。高通滤波器的输出值不在数据寄存器中（参见第八节的MPU-6000/ MPU-6050产品规格文档图）。
+ *
+ * 高通滤波器有三种模式：
+ *
+ * 
+ *    重置:在一个样本中将滤波器输出值设为零。这有效的禁用了高通滤波器。这种模式可以快速切换滤波器的设置模式。
+ *
+ *    开启:高通滤波器能通过高于截止频率的信号。
+ *
+ *    持续:触发后,过滤器持续当前采样。过滤器输出值是输入样本和持续样本之间的差异。
+ * 
+
+ *
+ * 
+ * ACCEL_HPF | 高通滤波模式| 截止频率
+ * ----------+-------------+------------------
+ * 0         | Reset       | None
+ * 1         | On          | 5Hz
+ * 2         | On          | 2.5Hz
+ * 3         | On          | 1.25Hz
+ * 4         | On          | 0.63Hz
+ * 7         | Hold        | None
+ * 
+
+ *
+ * @返回当前高通滤波器配置
+ * @请参见MPU6050_DHPF_RESET字段
+ * @请参见MPU6050_RA_ACCEL_CONFIG字段
+ */
+uint8_t MPU6050::getDHPFMode() {
+    I2Cdev::readBits(devAddr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_ACCEL_HPF_BIT, MPU6050_ACONFIG_ACCEL_HPF_LENGTH, buffer);
+    return buffer[0];
+}
+/*
+ * 设定高通滤波器的配置.
+ * @新高通滤波器配置的带宽参数
+ * @请参见setDHPFMode()字段
+ * @请参见MPU6050_DHPF_RESET字段
+ * @请参见MPU6050_RA_ACCEL_CONFIG字段
+ */
+void MPU6050::setDHPFMode(uint8_t bandwidth) {
+    I2Cdev::writeBits(devAddr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_ACCEL_HPF_BIT, MPU6050_ACONFIG_ACCEL_HPF_LENGTH, bandwidth);
+}
+
+// FF_THR寄存器
+
+/*
+ * 获取自由落体的加速度阈值。
+ * 这个寄存器为自由落体的阈值检测进行配置。FF_THR的单位是1LSB = 2mg。当加速度传感器测量而得的三个轴的绝对值都小于检测阈值时，就可以测得自由落体值。这种情况下，自由落体时间计数器计数一次 (寄存器30)。当自由落体时间计数器达到FF_DUR中规定的时间时，自由落体被中断。
+ *
+ * 更多自由落体中断检测的相关信息，详见8.2节的MPU-6000/MPU-6050产品规格文件和该文件下的寄存器56和寄存器58.
+ *
+ * @返回当前自由落体加速度阈值(LSB = 2mg)
+ * @请参见MPU6050_RA_FF_THR字段
+ */
+uint8_t MPU6050::getFreefallDetectionThreshold() {
+    I2Cdev::readByte(devAddr, MPU6050_RA_FF_THR, buffer);
+    return buffer[0];
+}
+/*
+ * 获取自由落体加速度阈值
+ * @新自由落体加速度阈值参数(LSB = 2mg)
+ * @请参见getFreefallDetectionThreshold()字段
+ * @请参见MPU6050_RA_FF_THR字段
+ */
+void MPU6050::setFreefallDetectionThreshold(uint8_t threshold) {
+    I2Cdev::writeByte(devAddr, MPU6050_RA_FF_THR, threshold);
+}
+
+// FF_DUR寄存器
+
+/*
+ * 获取自由落体时间阈值
+ * 这个寄存器为自由落体时间阈值计数器进行配置。时间计数频率为1 khz,因此FF_DUR的单位是 1 LSB = 1毫秒。
+ *
+ * 当加速度器测量而得的绝对值都小于检测阈值时，自由落体时间计数器计数一次。当自由落体时间计数器达到该寄存器的规定时间时，自由落体被中断。
+ *
+ * 更多自由落体中断检测的相关信息，详见8.2节的MPU-6000/MPU-6050产品规格文件和该文件下的寄存器56和寄存器58文件.
+ *
+ * 返回当前自由落体加速度阈值(LSB = 1ms)
+ * 请参见MPU6050_RA_FF_DUR字段
+ */
+uint8_t MPU6050::getFreefallDetectionDuration() {
+    I2Cdev::readByte(devAddr, MPU6050_RA_FF_DUR, buffer);
+    return buffer[0];
+}
+/*
+ * 获取自由落体时间阈值
+ * 自由落体时间阈值参数(LSB = 1ms)
+ * 请参见getFreefallDetectionDuration()字段
+ * 请参见MPU6050_RA_FF_DUR字段
+ */
+void MPU6050::setFreefallDetectionDuration(uint8_t duration) {
+    I2Cdev::writeByte(devAddr, MPU6050_RA_FF_DUR, duration);
+}
+
+// MOT_THR寄存器
+
+/** 获取运动检测的加速度阈值。
+ * 这个寄存器为运动中断的阈值检测进行配置。MOT_THR的单位是 1LSB = 2mg。当加速度器测量而得的绝对值都超过该运动检测的阈值时，即可测得该运动。这一情况下，运动时间检测计数器计数一次。当运动检测计数器达到MOT_DUR (Register 32)的规定时间时，运动检测被中断。
+ *
+ * 运动中断表明了被检测的运动MOT_DETECT_STATUS (Register 97)的轴和极性。
+ *
+ * 更多运动检测中断的相关信息，详见8.3节的MPU-6000/MPU-6050产品规格文件和该文件下的寄存器56和寄存器58文件.
+ *
+ * 返回当前运动检测加速度阈值(LSB = 2mg)
+ * @请参见MPU6050_RA_MOT_THR字段@see MPU6050_RA_MOT_THR
+ */
+uint8_t MPU6050::getMotionDetectionThreshold() {
+    I2Cdev::readByte(devAddr, MPU6050_RA_MOT_THR, buffer);
+    return buffer[0];
+}
+/**设定自由落体加速度阈值..
+ * @新运动检测加速度阈值参数(LSB = 2mg)
+ * @请参见getMotionDetectionThreshold()字段
+ * @请参见MPU6050_RA_MOT_THR字段
+ */
+void MPU6050::setMotionDetectionThreshold(uint8_t threshold) {
+    I2Cdev::writeByte(devAddr, MPU6050_RA_MOT_THR, threshold);
+}
+
+//MOT_DUR寄存器
+
+/** 获取运动检测时间的阈值。
+ 这个寄存器为运动中断的阈值检测进行配置。时间计数器计数频率为1 kHz ，因此MOT_THR的单位是 1LSB = 1ms。当加速度器测量而得的绝对值都超过该运动检测的阈值时(Register 31)，运动检测时间计数器计数一次。当运动检测计数器达到该寄存器规定的时间时，运动检测被中断。
+ *
+ * 更多运动检测中断的相关信息，详见8.3节的MPU-6000/MPU-6050产品规格文件。
+ *
+ * 返回当前运动检测加速度阈值(LSB = 1ms)
+ ** @请参见MPU6050_RA_MOT_ DUR字段
+ */
+uint8_t MPU6050::getMotionDetectionDuration() {
+    I2Cdev::readByte(devAddr, MPU6050_RA_MOT_DUR, buffer);
+    return buffer[0];
+}
+/** 设定运动检测的时间阈值
+ * @新运动检测的时间阈值参数(LSB = 1ms)
+ * @请参见getMotionDetectionDuration()字段
+ * @请参见MPU6050_RA_MOT_DUR字段
+ */
+void MPU6050::setMotionDetectionDuration(uint8_t duration) {
+    I2Cdev::writeByte(devAddr, MPU6050_RA_MOT_DUR, duration);
+}
+
+//ZRMOT_THR寄存器
+
+/** 获取零运动检测加速度阈值。
+ * 这个寄存器为零运动中断检测进行配置。ZRMOT_THR的单位是1LSB = 2mg。当加速度器测量而得的三个轴的绝对值都小于检测阈值时，就可以测得零运动。这种情况下，零运动时间计数器计数一次 (寄存器34)。当自零运动时间计数器达到ZRMOT_DUR (Register 34)中规定的时间时，零运动被中断。
+ *
+ * 与自由落体或运动检测不同的是，当零运动首次检测到以及当零运动检测不到时，零运动检测都被中断。
+ *
+ * 当零运动被检测到时,其状态将在MOT_DETECT_STATUS寄存器(寄存器97) 中显示出来。当运动状态变为零运动状态被检测到时,状态位设置为1。当零运动状态变为运动状态被检测到时,状态位设置为0。
+ *
+ * 更多零运动检测中断的相关信息，详见8.4节的MPU-6000/MPU-6050产品规格文件和该文件下的寄存器56和寄存器58的相关文件。
+ *
+ * @返回当前零运动检测的加速度阈值(LSB = 2mg)
+* @请参见MPU6050_RA_ZRMOT_THR字段
+ */
+uint8_t MPU6050::getZeroMotionDetectionThreshold() {
+    I2Cdev::readByte(devAddr, MPU6050_RA_ZRMOT_THR, buffer);
+    return buffer[0];
+}
+/**设定零运动检测的加速度阈值
+* @新零运动检测的加速度阈值参数 (LSB = 2mg)
+ * @请参见getZeroMotionDetectionThreshold()字段
+ * @请参见MPU6050_RA_ZRMOT_THR字段
+ */
+void MPU6050::setZeroMotionDetectionThreshold(uint8_t threshold) {
+    I2Cdev::writeByte(devAddr, MPU6050_RA_ZRMOT_THR, threshold);
+}
+
+// ZRMOT_DUR寄存器
+
+/**获取零运动检测的时间阈值
+ * 这个寄存器为零运动中断检测进行时间计数器的配置。时间计数器的计数频率为16 Hz,因此ZRMOT_DUR的单位是1 LSB = 64 ms。当加速度器测量而得的绝对值都小于检测器的阈值(Register 33)时，运动检测时间计数器计数一次。当零运动检测计数器达到该寄存器规定的时间时，零运动检测被中断。
+ *
+ * 更多零运动检测中断的相关信息，详见8.4节的MPU-6000/MPU-6050产品规格文件和该文件下的寄存器56和寄存器58的相关文件。
+ *
+ *返回当前零运动检测时间的阈值(LSB = 64ms)
+ * @请参见MPU6050_RA_ZRMOT_DUR字段
+ */
+uint8_t MPU6050::getZeroMotionDetectionDuration() {
+    I2Cdev::readByte(devAddr, MPU6050_RA_ZRMOT_DUR, buffer);
+    return buffer[0];
+}
+/** 设定零运动检测的时间阈值
+ * @新零运动检测的时间阈值参数 (LSB = 1ms)
+ * @请参见getZeroMotionDetectionDuration()字段
+ * @请参见MPU6050_RA_ZRMOT_DU R字段
+ */
+void MPU6050::setZeroMotionDetectionDuration(uint8_t duration) {
+    I2Cdev::writeByte(devAddr, MPU6050_RA_ZRMOT_DUR, duration);
+}
+
+// FIFO_EN寄存器
+
+/** 获取启用FIFO的温度值
+ *当设置为1时,这一位点将TEMP_OUT_H and TEMP_OUT_L (寄存器  65 和
+寄存器 66)写入FIFO缓冲中。
+ *  @返回当前启用FIFO的温度值
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+bool MPU6050::getTempFIFOEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_TEMP_FIFO_EN_BIT, buffer);
+    return buffer[0];
+}
+/** 设定启用FIFO的温度值
+ * @启用FIFO的温度值参数
+ * @请参见getTempFIFOEnabled()字段
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+void MPU6050::setTempFIFOEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_TEMP_FIFO_EN_BIT, enabled);
+}
+/** 获取启用FIFO的陀螺仪的X轴的值。
+ *当设置为1时,这一位点将GYRO_XOUT_H and GYRO_XOUT_L (寄存器  67 和
+寄存器  68)写入FIFO缓冲中。
+ * @返回启用FIFO的陀螺仪X轴的值
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+bool MPU6050::getXGyroFIFOEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_XG_FIFO_EN_BIT, buffer);
+    return buffer[0];
+}
+/** 设定启用FIFO的陀螺仪的X轴的值。
+ * @ FIFO的陀螺仪的X轴参数
+ * @请参见getXGyroFIFOEnabled()字段
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+void MPU6050::setXGyroFIFOEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_XG_FIFO_EN_BIT, enabled);
+}
+/** 获取启用FIFO的陀螺仪的Y轴的值。
+ * 当设置为1时,这一位点将GYRO_YOUT_H and GYRO_YOUT_L (寄存器  69合寄存器 70)写入FIFO缓冲中。
+ * @返回启用FIFO的陀螺仪Y轴的值
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+bool MPU6050::getYGyroFIFOEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_YG_FIFO_EN_BIT, buffer);
+    return buffer[0];
+}
+/** 设定启用FIFO的陀螺仪的Y轴的值。
+ * @ FIFO的陀螺仪的Y轴启用参数
+ * @请参见getYGyroFIFOEnabled()字段
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+void MPU6050::setYGyroFIFOEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_YG_FIFO_EN_BIT, enabled);
+}
+/** 获取启用FIFO的陀螺仪的Z轴的值。
+ *当设置为1时,这一位点将GYRO_ZOUT_H and GYRO_ZOUT_L (寄存器  71 和寄存器 72)写入FIFO缓冲中。
+ * @返回启用FIFO的陀螺仪Z轴的值
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+bool MPU6050::getZGyroFIFOEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_ZG_FIFO_EN_BIT, buffer);
+    return buffer[0];
+}
+/** 设定启用FIFO的陀螺仪的Z轴的值。
+ * @ FIFO的陀螺仪的Z轴参数
+ * @请参见getZGyroFIFOEnabled()字段
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+void MPU6050::setZGyroFIFOEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_ZG_FIFO_EN_BIT, enabled);
+}
+/** 获取启用FIFO的加速度值
+ * 当设置为1时,这一位点将ACCEL_XOUT_H, ACCEL_XOUT_L, ACCEL_YOUT_H,
+ACCEL_YOUT_L, ACCEL_ZOUT_H, and ACCEL_ZOUT_L寄存器  59 to寄存器 64)写入FIFO缓冲中。
+ * @返回当前启用FIFO的加速度值
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+bool MPU6050::getAccelFIFOEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_ACCEL_FIFO_EN_BIT, buffer);
+    return buffer[0];
+}
+/**设定启用FIFO的加速度值
+ * @ 启用新FIFO的加速度启用参数
+ * @请参见getAccelFIFOEnabled()字段
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+void MPU6050::setAccelFIFOEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_ACCEL_FIFO_EN_BIT, enabled);
+}
+/** 获取Slave 2 FIFO的启用值
+*当设置为1时,这一位点将与Slave 2 相连的EXT_SENS_DATA 寄存器 (寄存器 73到o寄存器  96)写入FIFO缓冲中。
+ * @返回当前Slave 2 FIFO的启用值
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+bool MPU6050::getSlave2FIFOEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_SLV2_FIFO_EN_BIT, buffer);
+    return buffer[0];
+}
+/** 设定Slave 2 FIFO的启用值
+ * @新Slave 2 FIFO的启用参数
+ * @请参见getSlave2FIFOEnabled()字段
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+void MPU6050::setSlave2FIFOEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_SLV2_FIFO_EN_BIT, enabled);
+}
+/** 获取Slave 1 FIFO的启用值
+ *当设置为1时,这一位点将与Slave 1 相连的EXT_SENS_DATA寄存器(寄存器73 到寄存器 96)写入FIFO缓冲中。
+ * @返回当前Slave 1 FIFO的启用值
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+bool MPU6050::getSlave1FIFOEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_SLV1_FIFO_EN_BIT, buffer);
+    return buffer[0];
+}
+/** 设定启用Slave 1 FIFO的值
+ * @ 新的Slave 1 FIFO启用参数
+ * @请参见getSlave1FIFOEnabled()字段
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+void MPU6050::setSlave1FIFOEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_SLV1_FIFO_EN_BIT, enabled);
+}
+/** 获取Slave 0 FIFO的启用值
+ *当设置为1时,这一位点将与Slave0 相连的EXT_SENS_DATA寄存器(寄存器73 到寄存器 96)写入FIFO缓冲中。
+ * @返回当前Slave 0 FIFO的启用值
+  * @请参见MPU6050_RA_FIFO_EN字段
+ */
+bool MPU6050::getSlave0FIFOEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_SLV0_FIFO_EN_BIT, buffer);
+    return buffer[0];
+}
+/** 设定Slave 0 FIFO的启用值
+ * @新Slave 0 FIFO的启用参数
+ * @请参见getSlave0FIFOEnabled()字段
+ * @请参见MPU6050_RA_FIFO_EN字段
+ */
+void MPU6050::setSlave0FIFOEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_FIFO_EN, MPU6050_SLV0_FIFO_EN_BIT, enabled);
+}
+
+// I2C_MST_CTRL寄存器
+
+/** 获取multi-master的启用值
+ * Multi-master功能允许在同一总线上使用多个I2C主机。在需要multi-master功能的电路中,将MULT_MST_EN设置为1。这将使电流增加约30 uA。
+ *
+ *在需要multi-master功能的电路中,I2C总线的状态由每个单独的I2C主机所决定。在一个I2C主机能够承担总线的仲裁之前,必须先确认没有其他I2C主机承担总线的仲裁。当MULT_MST_EN设置为1时,MPU-60X0的总线仲裁检测逻辑被打开,启用该检测逻辑来检测总线是否可用。
+ *
+ * @返回当前multi-master的启用值
+ * @请参见MPU6050_RA_I2C_MST_CTRL字段
+ */
+bool MPU6050::getMultiMasterEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_I2C_MST_CTRL, MPU6050_MULT_MST_EN_BIT, buffer);
+    return buffer[0];
+}
+/**设定multi-master的启用值
+  * @新multi-master的启用参数
+ * @请参见getMultiMasterEnabled()字段
+ * @请参见MPU6050_RA_I2C_MST_CTRL字段
+ */
+void MPU6050::setMultiMasterEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_I2C_MST_CTRL, MPU6050_MULT_MST_EN_BIT, enabled);
+}
+/** 获取wait-for-external-sensor-data的启用值
+ * *当WAIT_FOR_ES位设置为1时,数据准备中断将会被推迟直到从Slave而得的外部传感器数据加载到EXT_SENS_DATA寄存器中。这是用来确保当数据准备中断被开启时，内部传感器数据(即陀螺仪和加速度传感器)和外部传感器数据都成功加载到各自的数据寄存器中(即数据同步完成)。
+ *
+ * @返回当前 wait-for-external-sensor-data 的启用值
+ * @请参见MPU6050_RA_I2C_MST_CTRL字段
+ */
+bool MPU6050::getWaitForExternalSensorEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_I2C_MST_CTRL, MPU6050_WAIT_FOR_ES_BIT, buffer);
+    return buffer[0];
+}
+/** 设置wait-for-external-sensor-data的启用值.
+ * @新wait-for-external-sensor-data的启用参数
+ * @请参见getWaitForExternalSensorEnabled()字段
+ * @请参见MPU6050_RA_I2C_MST_CTRL字段
+ */
+void MPU6050::setWaitForExternalSensorEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_I2C_MST_CTRL, MPU6050_WAIT_FOR_ES_BIT, enabled);
+}
+/** 获取Slave 3 FIFO的启用值
+ * *当设置为1时,这一位点将与Slave3 相连的EXT_SENS_DATA寄存器(寄存器73 到寄存器 96)写入FIFO缓冲中。
+ * @返回当前启用Slave 3 FIFO的值
+ * @ 请参见MPU6050_RA_MST_CTRL字段
+ */
+bool MPU6050::getSlave3FIFOEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_I2C_MST_CTRL, MPU6050_SLV_3_FIFO_EN_BIT, buffer);
+    return buffer[0];
+}
+/** 设定Slave 3 FIFO的启用值
+ * @新Slave 3 FIFO的启用参数
+ * @请参见getSlave3FIFOEnabled()字段
+ * @请参见MPU6050_RA_MST_CTRL字段
+ */
+void MPU6050::setSlave3FIFOEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_I2C_MST_CTRL, MPU6050_SLV_3_FIFO_EN_BIT, enabled);
+}
+/** 获取slave读/写转换的启用值
+ * I2C_MST_P_NSR位对I2C主机slave读取间的转变进行配置。如果该位等于0,将重新读取。如果该位等于1,下一个读取之前会有停顿。当一个读取转换为一个编写,通常在停顿后开始连续编写。
+ *
+ *@返回当前slave读/编转换的启用值
+ * @请参见MPU6050_RA_I2C_MST_CTRL字段
+ */
+bool MPU6050::getSlaveReadWriteTransitionEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_I2C_MST_CTRL, MPU6050_I2C_MST_P_NSR_BIT, buffer);
+    return buffer[0];
+}
+/** 设定slave读/编转换的启用值
+ *@新slave读/编转换的启用参数
+ * @请参见getSlaveReadWriteTransitionEnabled()字段
+ * @请参见 MPU6050_RA_I2C_MST_CTRL字段
+ */
+void MPU6050::setSlaveReadWriteTransitionEnabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_I2C_MST_CTRL, MPU6050_I2C_MST_P_NSR_BIT, enabled);
+}
+/** 获取I2C主时钟速度。
+ * * I2C_MST_CLK是一个4位的无符号值，它用于对内部的频率为8MHz的时钟进行分频配置。它根据下表对I2C主时钟速度进行设置:
+ *
+ * 
+ * I2C_MST_CLK | I2C 主时钟速度 | 8MHz 时钟分频器
+ * ------------+------------------------+-------------------
+ * 0           | 348kHz                 | 23
+ * 1           | 333kHz                 | 24
+ * 2           | 320kHz                 | 25
+ * 3           | 308kHz                 | 26
+ * 4           | 296kHz                 | 27
+ * 5           | 286kHz                 | 28
+ * 6           | 276kHz                 | 29
+ * 7           | 267kHz                 | 30
+ * 8           | 258kHz                 | 31
+ * 9           | 500kHz                 | 16
+ * 10          | 471kHz                 | 17
+ * 11          | 444kHz                 | 18
+ * 12          | 421kHz                 | 19
+ * 13          | 400kHz                 | 20
+ * 14          | 381kHz                 | 21
+ * 15          | 364kHz                 | 22
+ * 
+
+ *
+ * @返回当前I2C 主时钟速度值
+ * @请参见MPU6050_RA_I2C_MST_CTRL字段
+ */
+uint8_t MPU6050::getMasterClockSpeed() {
+    I2Cdev::readBits(devAddr, MPU6050_RA_I2C_MST_CTRL, MPU6050_I2C_MST_CLK_BIT, MPU6050_I2C_MST_CLK_LENGTH, buffer);
+    return buffer[0];
+}
+/** 设定I2C 主时钟速度值
+ * @返回当前I2C 主时钟速度值
+ * @请参见MPU6050_RA_I2C_MST_CTRL字段
+ */
+void MPU6050::setMasterClockSpeed(uint8_t speed) {
+    I2Cdev::writeBits(devAddr, MPU6050_RA_I2C_MST_CTRL, MPU6050_I2C_MST_CLK_BIT, MPU6050_I2C_MST_CLK_LENGTH, speed);
+}
+
+// I2C_SLV*寄存器(Slave 0-3)
+
+/** 获取指定slave (0-3)的I2C地址
+ * 注意Bit 7 (MSB)控制了读/写模式。如果设置了Bit 7,那么这是一个读取操作,如果将其清除,那么这是一个编写操作。其余位(6-0)是slave设备的7-bit设备地址。
+ *
+ * 在读取模式中,读取结果是存储于最低可用的EXT_SENS_DATA寄存器中。更多读取结果分布信息，请参阅EXT_SENS_DATA寄存器的描述(寄存器 73 - 96)。
+ *
+ * MPU-6050支持全5个slave，但Slave 4有其特殊功能(getSlave4* 和setSlave4*)。
+ *
+ * 如寄存器25中所述，I2C数据转换通过采样率体现。用户负责确保I2C数据转换能够在一个采样率周期内完成。
+ *
+ * I2C slave数据传输速率可根据采样率来减小。减小的传输速率是由I2C_MST_DLY(寄存器52)所决定的。slave数据传输速率是否根据采样率来减小是由I2C_MST_DELAY_CTRL (寄存器103)所决定的。
+ *
+* slave的处理指令是固定的。Slave的处理顺序是Slave 1, Slave 2, Slave 3 和 Slave 4。如果某一个Slave被禁用了，那么它会被自动忽略。
+ *
+ * 每个slave可按采样率或降低的采样率来读取。在有些slave以采样率读取有些以减小的采样率读取的情况下，slave的读取顺序依旧不变。然而，如果一些slave的读取速率不能在特定循环中进行读取，那么它们会被自动忽略。更多降低的读取速率相关信息,请参阅寄存器52。Slave是否按采样率或降低的采样率来读取由寄存器103得Delay Enable位来决定。
+ *
+ * @Slave 数 (0-3)参数
+ * @返回当前指定slave地址
+ * @请参见MPU6050_RA_I2C_SLV0_ADDR字段
+ */
+uint8_t MPU6050::getSlaveAddress(uint8_t num) {
+    if (num > 3) return 0;
+    I2Cdev::readByte(devAddr, MPU6050_RA_I2C_SLV0_ADDR + num*3, buffer);
+    return buffer[0];
+}
+/** 设定指定slave (0-3)的I2C 地址 
+ * @Slave 数 (0-3)参数
+ * @指定slave的新地址参数
+ * @请参见getSlaveAddress()字段
+ * @请参见MPU6050_RA_I2C_SLV0_ADDR字段
+ */
+void MPU6050::setSlaveAddress(uint8_t num, uint8_t address) {
+    if (num > 3) return;
+    I2Cdev::writeByte(devAddr, MPU6050_RA_I2C_SLV0_ADDR + num*3, address);
+}
+/** 获取指定slave (0-3)的当前内部寄存器
+ * Slave的读/写操作适用于这个MPU寄存器，不管寄存器存储了什么地址。
+ *
+ * MPU-6050支持全5个slave，但Slave 4有其特殊功能。
+ *
+ * @Slave 数 (0-3)参数
+ * @返回指定slave的当前寄存器
+ * @请参见MPU6050_RA_I2C_SLV0_REG字段
+ */
+uint8_t MPU6050::getSlaveRegister(uint8_t num) {
+    if (num > 3) return 0;
+    I2Cdev::readByte(devAddr, MPU6050_RA_I2C_SLV0_REG + num*3, buffer);
+    return buffer[0];
+}
+/** 设定指定slave（0-3）的当前内部寄存器.
+ * @Slave 数 (0-3)参数
+ * @指定slave的新当前寄存器参数
+ * @请参见getSlaveRegister()字段
+ * @请参见 MPU6050_RA_I2C_SLV0_REG字段
+ */
+void MPU6050::setSlaveRegister(uint8_t num, uint8_t reg) {
+    if (num > 3) return;
+    I2Cdev::writeByte(devAddr, MPU6050_RA_I2C_SLV0_REG + num*3, reg);
+}
+/** 获取指定slave（0-3）的启用值
+ * 当设置为1时,这个位启用Slave 0数据传输操作。当设置为0时,这个位禁用了Slave 0数据传输操作。
+ * @ Slave 数 (0-3)参数
+ * @返回当前指定slave的启用值
+ * @请参见MPU6050_RA_I2C_SLV0_CTRL字段
+ */
+bool MPU6050::getSlaveEnabled(uint8_t num) {
+    if (num > 3) return 0;
+    I2Cdev::readBit(devAddr, MPU6050_RA_I2C_SLV0_CTRL + num*3, MPU6050_I2C_SLV_EN_BIT, buffer);
+    return buffer[0];
+}
+/** 设定指定slave（0-3）的启用值
+ * @ Slave 数 (0-3)参数
+ * @指定slave的启用参数
+ * 参见getSlaveEnabled()
+ * @请参见MPU6050_RA_I2C_SLV0_CTRL字段
+ */
+void MPU6050::setSlaveEnabled(uint8_t num, bool enabled) {
+    if (num > 3) return;
+    I2Cdev::writeBit(devAddr, MPU6050_RA_I2C_SLV0_CTRL + num*3, MPU6050_I2C_SLV_EN_BIT, enabled);
+}
+/** 启用指定slave的词对字节交换
+ * 当设置为1时,字节交换启用。当启用字节交换时,词对的高低字节即可交换。词对配对规律，请参考I2C_SLV0_GRP。为了进行字节交换，当设置为0时，由slave0交换而来的字节将被存储于EXT_SENS_DATA寄存器中。
+ *
+ * @ Slave 数 (0-3)参数
+ * @返回当前指定slave的词对字节交换启用值
+ * @请参见MPU6050_RA_I2C_SLV0_CTRL字段
+ */
+bool MPU6050::getSlaveWordByteSwap(uint8_t num) {
+    if (num > 3) return 0;
+    I2Cdev::readBit(devAddr, MPU6050_RA_I2C_SLV0_CTRL + num*3, MPU6050_I2C_SLV_BYTE_SW_BIT, buffer);
+    return buffer[0];
+}
+/** 设定指定slave（0-3）的词对字节交换.
+ *@ Slave 数 (0-3)参数
+ * @当前指定slave的词对字节交换启用参数
+ * @请参见getSlaveWordByteSwap()字段
+ * @请参见MPU6050_RA_I2C_SLV0_CTRL字段
+ */
+void MPU6050::setSlaveWordByteSwap(uint8_t num, bool enabled) {
+    if (num > 3) return;
+    I2Cdev::writeBit(devAddr, MPU6050_RA_I2C_SLV0_CTRL + num*3, MPU6050_I2C_SLV_BYTE_SW_BIT, enabled);
+}
+/**获取指定slave（0-3）的编写模式.
+ * 当设置为1时,只进行数据的读或写操作。当设置为0时,在读写数据之前将编写一个寄存器地址。当指定寄存器地址在slave设备中时，这应该等于0，而在该寄存器中会进行数据处理。
+ *
+ * @ Slave 数 (0-3)参数 (0-3)
+ * @返回当前指定slave的编写模式(0 = register address + data, 1 = data only)
+ * @请参见MPU6050_RA_I2C_SLV0_CTRL字段
+ */
+bool MPU6050::getSlaveWriteMode(uint8_t num) {
+    if (num > 3) return 0;
+    I2Cdev::readBit(devAddr, MPU6050_RA_I2C_SLV0_CTRL + num*3, MPU6050_I2C_SLV_REG_DIS_BIT, buffer);
+    return buffer[0];
+}
+/** 设定指定slave（0-3）的编写模式
+ * @ Slave 数 (0-3)参数
+ * @指定slave的新编写模式参数
+ * @请参见getSlaveWriteMode()字段
+ * @请参见MPU6050_RA_I2C_SLV0_CTRL字段
+ */
+void MPU6050::setSlaveWriteMode(uint8_t num, bool mode) {
+    if (num > 3) return;
+    I2Cdev::writeBit(devAddr, MPU6050_RA_I2C_SLV0_CTRL + num*3, MPU6050_I2C_SLV_REG_DIS_BIT, mode);
+}
+/** 获取指定slave（0-3）的词对分组顺序函数.
+ * 这确定了从寄存器接收到的指定词对分组顺序。当设置为0时，寄存器地址为0和1、2和3等(甚至是不成对的寄存器地址)的字节组成词对。当设置为1时，寄存器地址为1和2、3和4等(甚至是不成对的寄存器地址)的字节组成词对。
+ *
+ * @Slave 数 (0-3)参数
+ * @返回当前指定slave的词对分组顺序
+ * @请参见MPU6050_RA_I2C_SLV0_CTRL字段
+ */
+bool MPU6050::getSlaveWordGroupOffset(uint8_t num) {
+    if (num > 3) return 0;
+    I2Cdev::readBit(devAddr, MPU6050_RA_I2C_SLV0_CTRL + num*3, MPU6050_I2C_SLV_GRP_BIT, buffer);
+    return buffer[0];
+}
+/** 设定指定slave（0-3）的词对分组顺序函数.
+ * @Slave 数 (0-3)参数
+ * @指定slave新词对分组顺序的启用参数。
+ * @请参见getSlaveWordGroupOffset()字段
+ * @请参见MPU6050_RA_I2C_SLV0_CTRL字段
+ */
+void MPU6050::setSlaveWordGroupOffset(uint8_t num, bool enabled) {
+    if (num > 3) return;
+    I2Cdev::writeBit(devAddr, MPU6050_RA_I2C_SLV0_CTRL + num*3, MPU6050_I2C_SLV_GRP_BIT, enabled);
+}
+/**获取指定slave（0-3）读取的字节数
+ * 确定由Slave 0转换而来和转换至Slave 0的字节数。将此位清楚为0就相当于通过在I2C_SLV0_EN上编写0来禁用该寄存器。
+ * @Slave 数 (0-3)参数
+ * @返回指定slave读取的字节数
+ * @请参见MPU6050_RA_I2C_SLV0_CTRL字段
+ */
+uint8_t MPU6050::getSlaveDataLength(uint8_t num) {
+    if (num > 3) return 0;
+    I2Cdev::readBits(devAddr, MPU6050_RA_I2C_SLV0_CTRL + num*3, MPU6050_I2C_SLV_LEN_BIT, MPU6050_I2C_SLV_LEN_LENGTH, buffer);
+    return buffer[0];
+}
+/** 设定指定slave（0-3）读取的字节数
+ * @Slave 数 (0-3)参数
+ * @指定slave的字节数长度参数
+ * @请参见getSlaveDataLength()字段
+ * @请参见MPU6050_RA_I2C_SLV0_CTRL字段
+ */
+void MPU6050::setSlaveDataLength(uint8_t num, uint8_t length) {
+    if (num > 3) return;
+    I2Cdev::writeBits(devAddr, MPU6050_RA_I2C_SLV0_CTRL + num*3, MPU6050_I2C_SLV_LEN_BIT, MPU6050_I2C_SLV_LEN_LENGTH, length);
+}
+
+// I2C_SLV*寄存器(Slave 4)
+
+/** 获取指定slave4的I2C地址
+ * 注意Bit 7 (MSB)控制了读/写模式。如果设置了Bit 7,那么这是一个读取操作,如果将其清除,那么这是一个编写操作。其余位(6-0)是slave设备的7-bit设备地址。
+ *
+ * @返回当前slave4的地址
+ * @请参见getSlaveAddress()字段
+ * @ 请参见MPU6050_RA_I2C_SLV4_ADDR字段
+ */
+uint8_t MPU6050::getSlave4Address() {
+    I2Cdev::readByte(devAddr, MPU6050_RA_I2C_SLV4_ADDR, buffer);
+    return buffer[0];
+}
+/** 设定指定slave4的I2C地址
+ * @ slave4的新地址参数
+ * @请参见getSlave4Address()字段
+ * @请参见MPU6050_RA_I2C_SLV4_ADDR字段
+ */
+void MPU6050::setSlave4Address(uint8_t address) {
+    I2Cdev::writeByte(devAddr, MPU6050_RA_I2C_SLV4_ADDR, address);
+}
+/** 获取slave4的当前内部寄存器
+ * Slave的读/写操作适用于这个MPU寄存器，不管寄存器存储了什么地址。
+ *
+ * @返回slave4的当前寄存器
+ * @请参见MPU6050_RA_I2C_SLV4_REG字段
+ */
+uint8_t MPU6050::getSlave4Register() {
+    I2Cdev::readByte(devAddr, MPU6050_RA_I2C_SLV4_REG, buffer);
+    return buffer[0];
+}
+/** 设定slave4的当前内部寄存器
+ * @slave4当前寄存器的寄存参数
+ * @请参见getSlave4Register()字段
+ * @请参见MPU6050_RA_I2C_SLV4_REG字段
+ */
+void MPU6050::setSlave4Register(uint8_t reg) {
+    I2Cdev::writeByte(devAddr, MPU6050_RA_I2C_SLV4_REG, reg);
+}
+/** 设定写于slave4的新字节
+ * 这一寄存器可储存写于slave4的数据。如果I2C_SLV4_RW设置为1（设置为读取模式），那么该寄存器无法执行操作。
+ * @写于slave4的新字节数据参数
+ * @ 请参见MPU6050_RA_I2C_SLV4_DO字段
+ */
+void MPU6050::setSlave4OutputByte(uint8_t data) {
+    I2Cdev::writeByte(devAddr, MPU6050_RA_I2C_SLV4_DO, data);
+}
+/** 获取slave4的启用值
+ * 当设置为1时，此位启用了slave4的转换操作。当设置为0时，则禁用该操作。
+ * @返回当前slave4的启用值 
+ * @请参见MPU6050_RA_I2C_SLV4_CTRL字段
+ */
+bool MPU6050::getSlave4Enabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_I2C_SLV4_CTRL, MPU6050_I2C_SLV4_EN_BIT, buffer);
+    return buffer[0];
+}
+/** 设定slave4的启用值
+ * @slave4新启用参数
+ * @请参见getSlave4Enabled()字段
+ * @请参见MPU6050_RA_I2C_SLV4_CTRL字段
+ */
+void MPU6050::setSlave4Enabled(bool enabled) {
+    I2Cdev::writeBit(devAddr, MPU6050_RA_I2C_SLV4_CTRL, MPU6050_I2C_SLV4_EN_BIT, enabled);
+}
+/** 获取slave4事务中断的启用值
+ * 当设置为1时，此位启用了slave4事务完成的中断信号的生成。当清除为0时，则禁用了该信号的生成。这一中断状态可在寄存器54中看到。
+ *
+ * @返回当前slave4事务中断的启用值
+ * @请参见MPU6050_RA_I2C_SLV4_CTRL字段
+ */
+bool MPU6050::getSlave4InterruptEnabled() {
+    I2Cdev::readBit(devAddr, MPU6050_RA_I2C_SLV4_CTRL, MPU6050_I2C_SLV4_INT_EN_BIT, buffer);
+    return buffer[0];
+}

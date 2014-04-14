@@ -1,0 +1,17 @@
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\LCDRLE8.c
+..\..\lib\lcdrle8.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\GUI_Private.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\GUI.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\LCD.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\lcdrle8.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\LCD_Private.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Core\LCD_ConfDefaults.h
+..\..\lib\lcdrle8.o: ..\ucGUI\Config\LCDConf.h

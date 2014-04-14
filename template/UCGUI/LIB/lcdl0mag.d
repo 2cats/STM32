@@ -1,0 +1,17 @@
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\LCDL0Mag.c
+..\..\lib\lcdl0mag.o: G:\TX\ARM\ARMCC\bin\..\include\stddef.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\GUI_Private.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\GUI_Protected.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\GUI.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\GUI_ConfDefaults.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Config\GUIConf.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\GUIType.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\LCD.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\GUIVersion.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\LCD_Protected.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\GUIDebug.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\GUI_X.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\WM\WM_GUI.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\LCD_Private.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Core\LCD_ConfDefaults.h
+..\..\lib\lcdl0mag.o: ..\ucGUI\Config\LCDConf.h
