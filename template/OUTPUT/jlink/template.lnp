@@ -23,6 +23,7 @@
 "..\output\jlink\protocol.o"
 "..\output\jlink\24l01.o"
 "..\output\jlink\doevery.o"
+"..\output\jlink\dacmanager.o"
 "..\output\jlink\core_cm3.o"
 "..\output\jlink\startup_stm32f10x_md.o"
 "..\output\jlink\misc.o"

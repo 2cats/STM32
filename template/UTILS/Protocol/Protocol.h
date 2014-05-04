@@ -42,5 +42,5 @@
 void PT_ParsePacket(void);
 unsigned char PT_GetOneByte(unsigned char *data);
 void PT_IRq_Handler(void);
-
+void PT_EnableIRQ(void);
 #endif

@@ -5,7 +5,7 @@
 
 /**********CONFIGURE***************/
 
-#define USING_UCGUI
+//#define USING_UCGUI
 #define OLED_CMD_BUFFER_LEN  			200//printf单次最大输出长度
 
 /*********************************/
