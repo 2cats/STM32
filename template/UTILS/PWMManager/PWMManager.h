@@ -7,7 +7,7 @@
 /************精度调节**************/
 #define TIM_FREQ_DIV	72
 //1,2,3,4,5.....
-//典型值为1或72
+//典型值为1或72,越小精度越高但范围缩小
 //原理：
 //TIM_TimeBaseStructure.TIM_Prescaler =TIM_FREQ_DIV-1;
 //TIM_TimeBaseStructure.TIM_Period =(u16)(TIM_REAL_FREQ/PWMProducer->frequency);//ARR寄存器

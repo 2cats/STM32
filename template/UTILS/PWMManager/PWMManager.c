@@ -167,7 +167,7 @@ void PWMStart(PWMProducerTypeDef*PWMProducer)
 
 	if(filterTIM(PWMProducer->route)==TIM1)
 	{
-		TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2; //选择定时器模式:TIM脉冲宽度调制模式2
+		TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; //选择定时器模式:TIM脉冲宽度调制模式2
 		TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable; //比较输出使能
 	}
 	else

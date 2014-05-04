@@ -528,6 +528,11 @@
               <FileType>1</FileType>
               <FilePath>..\UTILS\DACManager\DACManager.c</FilePath>
             </File>
+            <File>
+              <FileName>ServoManager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\ServoManager\ServoManager.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1088,7 +1093,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\USER;..\LIB\inc;..\CORE;..\FATFS\src;..\FATFS\SPI;..\FATFS\SD;..\mpu6050\I2C_analog;..\mpu6050\mpu600;..\UTILS\delay;..\UTILS\Filter;..\UTILS\usart;..\UTILS\millis;..\UTILS\PID;..\UTILS\sys;..\UTILS\ADCManager;..\UTILS\EXTIManager;..\UTILS\InputCatcher;..\UTILS\USARTBufReceiever;..\UTILS\DS18B20;..\UTILS\PWMManager;..\UTILS\USART2BufReceiever;..\UTILS\usart2;..\UCGUI\LIB;..\probe;..\probe\inc;..\UCGUI\inc;..\UTILS\OLED;..\UTILS\KeyFSM;..\UltraProbe;..\UTILS\PID_AutoTune;..\UTILS\THB7128;..\UTILS\RTC;..\UTILS\Protocol;..\UTILS\NRF24L01;..\UTILS\spi;..\UTILS\LCD;..\UTILS\doEvery;..\UTILS\DACManager</IncludePath>
+              <IncludePath>..\USER;..\LIB\inc;..\CORE;..\FATFS\src;..\FATFS\SPI;..\FATFS\SD;..\mpu6050\I2C_analog;..\mpu6050\mpu600;..\UTILS\delay;..\UTILS\Filter;..\UTILS\usart;..\UTILS\millis;..\UTILS\PID;..\UTILS\sys;..\UTILS\ADCManager;..\UTILS\EXTIManager;..\UTILS\InputCatcher;..\UTILS\USARTBufReceiever;..\UTILS\DS18B20;..\UTILS\PWMManager;..\UTILS\USART2BufReceiever;..\UTILS\usart2;..\UCGUI\LIB;..\probe;..\probe\inc;..\UCGUI\inc;..\UTILS\OLED;..\UTILS\KeyFSM;..\UltraProbe;..\UTILS\PID_AutoTune;..\UTILS\THB7128;..\UTILS\RTC;..\UTILS\Protocol;..\UTILS\NRF24L01;..\UTILS\spi;..\UTILS\LCD;..\UTILS\doEvery;..\UTILS\DACManager;..\UTILS\ServoManager</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1258,6 +1263,11 @@
               <FileName>DACManager.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UTILS\DACManager\DACManager.c</FilePath>
+            </File>
+            <File>
+              <FileName>ServoManager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\ServoManager\ServoManager.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1989,6 +1999,11 @@
               <FileName>DACManager.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UTILS\DACManager\DACManager.c</FilePath>
+            </File>
+            <File>
+              <FileName>ServoManager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\ServoManager\ServoManager.c</FilePath>
             </File>
           </Files>
         </Group>

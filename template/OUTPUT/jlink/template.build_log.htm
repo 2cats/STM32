@@ -9,63 +9,37 @@ Project File Date:  05/04/2014
 <h2>Output:</h2>
 Build target 'Jlink'
 linking...
-Program Size: Code=25460 RO-data=332 RW-data=120 ZI-data=1632  
+Program Size: Code=27124 RO-data=332 RW-data=136 ZI-data=1904  
 FromELF: creating hex file...
 "..\OUTPUT\jlink\template.axf" - 0 Error(s), 0 Warning(s).
 </pre>
 </body>
 </html>
-.
-_FSM_BUF[10][PT_PERDATA_BUF_SIZE];
-..\UTILS\Protocol\Protocol.c: 1 warning, 0 errors
-linking...
-Program Size: Code=25460 RO-data=332 RW-data=120 ZI-data=1632  
+
+6 RO-data=332 RW-data=136 ZI-data=1904  
 FromELF: creating hex file...
 "..\OUTPUT\jlink\template.axf" - 0 Error(s), 1 Warning(s).
-=26088 RO-data=332 RW-data=136 ZI-data=1688  
-FromELF: creating hex file...
-"..\OUTPUT\jlink\template.axf" - 0 Error(s), 3 Warning(s).
-DACManager.h(14): warning:  #1-D: last line of file ends without a newline
-  #endif 
-..\UTILS\DACManager\DACManager.c: 2 warnings, 0 errors
+\UTILS\ServoManager\ServoManager.c: 1 warning, 0 errors
 linking...
-Program Size: Code=26088 RO-data=332 RW-data=136 ZI-data=1688  
+Program Size: Code=27124 RO-data=332 RW-data=136 ZI-data=1904  
 FromELF: creating hex file...
-"..\OUTPUT\jlink\template.axf" - 0 Error(s), 5 Warning(s).
-V8.00
-S/N : 19850127 
-Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFULL 
- 
-* JLink Info: Found SWD-DP with ID 0x1BA01477
-* JLink Info: Found SWD-DP with ID 0x1BA01477
-* JLink Info: Found Cortex-M3 r1p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: TPIU fitted.
-* JLink Info: ETM fitted.
-ROMTableAddr = 0xE00FF003
- 
-Target info:
-------------
-Device: STM32F103ZE
-VTarget = 3.293V
-State of Pins: 
-TCK: 0, TDI: 1, TDO: 0, TMS: 1, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 4000 kHz
- 
-Erase Done.
-Programming Done.
-Application running ...
-reakpoints: 8192
-Watchpoints:          4
-JTAG speed: 4000 kHz
- 
-Erase Done.
-Programming Done.
-Application running ...
-rs
+"..\OUTPUT\jlink\template.axf" - 0 Error(s), 2 Warning(s).
+ but never referenced
+  static ServoManagerTypeTypeDef *defaultServoManager[16];
+..\UTILS\ServoManager\ServoManager.c(3): warning:  #177-D: variable "defaultServoPWMManager" was declared but never referenced
+  static PWMManagerTypeDef defaultServoPWMManager;
+..\UTILS\ServoManager\ServoManager.c(4): warning:  #177-D: variable "_defaultServoPWMManagerInitialedFlag" was declared but never referenced
+  static u8 _defaultServoPWMManagerInitialedFlag=0;
+..\UTILS\ServoManager\ServoManager.c: 5 warnings, 2 errors
+"..\OUTPUT\jlink\template.axf" - 2 Error(s), 5 Warning(s).
+Target not created
+erInitialedFlag=0;
+..\UTILS\ServoManager\ServoManager.c: 5 warnings, 2 errors
+"..\OUTPUT\jlink\template.axf" - 2 Error(s), 6 Warning(s).
+Target not created
+131): warning:  #223-D: function "vsscanf" declared implicitly
+        i = vsscanf(buffer,fmt,arg_ptr);
+..\UTILS\usart2\usart2.c: 2 warnings, 0 errors
 compiling USART2BufReceiever.c...
 compiling USARTBufReceiever.c...
 compiling THB7128.c...
@@ -77,11 +51,10 @@ compiling Protocol.c...
 compiling 24l01.c...
 compiling doEvery.c...
 compiling DACManager.c...
-..\UTILS\DACManager\DACManager.h(13): warning:  #1295-D: Deprecated declaration DACManager_Init_Enable - give arg types
-  void DACManager_Init_Enable();
-..\UTILS\DACManager\DACManager.h(14): warning:  #1-D: last line of file ends without a newline
-  #endif 
-..\UTILS\DACManager\DACManager.c: 2 warnings, 0 errors
+compiling ServoManager.c...
+..\UTILS\ServoManager\ServoManager.h(11): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\UTILS\ServoManager\ServoManager.c: 1 warning, 0 errors
 compiling core_cm3.c...
 compiling misc.c...
 compiling stm32f10x_adc.c...
@@ -119,6 +92,6 @@ compiling MPU6050.c...
 compiling iic_analog.c...
 compiling interrupt.c...
 linking...
-Program Size: Code=25412 RO-data=332 RW-data=120 ZI-data=1632  
+Program Size: Code=25460 RO-data=332 RW-data=120 ZI-data=1632  
 FromELF: creating hex file...
-"..\OUTPUT\jlink\template.axf" - 0 Error(s), 12 Warning(s).
+"..\OUTPUT\jlink\template.axf" - 0 Error(s), 9 Warning(s).
