@@ -5,7 +5,10 @@
 
 
 /************精度调节**************/
-#define TIM_FREQ_DIV	72
+#define TIM_FREQ_DIV1	72
+#define TIM_FREQ_DIV2	72
+#define TIM_FREQ_DIV3	72
+#define TIM_FREQ_DIV4	72
 //1,2,3,4,5.....
 //典型值为1或72,越小精度越高但范围缩小
 //原理：
@@ -17,7 +20,10 @@
 
 
 
-#define TIM_REAL_FREQ (72000000.0/TIM_FREQ_DIV)
+#define TIM_REAL_FREQ1 (72000000.0/TIM_FREQ_DIV1)
+#define TIM_REAL_FREQ2 (72000000.0/TIM_FREQ_DIV2)
+#define TIM_REAL_FREQ3 (72000000.0/TIM_FREQ_DIV3)
+#define TIM_REAL_FREQ4 (72000000.0/TIM_FREQ_DIV4)
 #ifndef _TIM_ROUTE_TYPE_
 #define _TIM_ROUTE_TYPE_
 typedef enum{

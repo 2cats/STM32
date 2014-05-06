@@ -5,7 +5,6 @@
 #define CMD_BUFFER_LEN  			200
 //USART2_TX PA2 
 //USART2_RX PA3 
-//uart2_printf有问题
 
 //串口2中断服务程序
 //注意,读取USARTx->SR能避免莫名其妙的错误  

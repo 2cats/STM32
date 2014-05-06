@@ -126,7 +126,7 @@ void PID_SetOutputLimits(double Min, double Max)
 }
 void PID_prepareM2A()
 {
-   _PID_ITerm = *defaultPID->output;
+   _PID_ITerm = *defaultPID->output;//此处代码适用于：稳态时需输出  若稳态无需输出则直接_PID_ITerm=0
    _PID_lastInput = *defaultPID->input;
    if(_PID_ITerm > defaultPID->outMax) _PID_ITerm = defaultPID->outMax;
    else if(_PID_ITerm < defaultPID->outMin) _PID_ITerm = defaultPID->outMin;

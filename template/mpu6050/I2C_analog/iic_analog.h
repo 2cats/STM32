@@ -2,6 +2,11 @@
 #define _iic_analog_h_
 #include "stm32f10x.h"
 //2014_3_18
+
+#define IIC_SUPER_TASK
+#ifdef IIC_SUPER_TASK
+#include "SuperTask.h"
+#endif
 /*********************************************************************************/
 /*修改模拟IIC的读取引脚以及引脚的端口号											 */
 /*这些宏定义定义好了以后引脚初始化函数会自行初始化时钟使能等必要的参数			 */
@@ -59,7 +64,7 @@ enum IIC_BUS_STATE_ENUM
 //IIC 延时
 extern void IIC_Delay(void);
 //IIC 启动函数
-extern u8 IIC_Start(void);
+extern void IIC_Start(void);
 //IIC 停止函数
 extern void IIC_Stop(void);
 //IIC 发送动作

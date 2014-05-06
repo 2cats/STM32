@@ -125,10 +125,43 @@ void TIM_OCxPreloadConfig( TIM_RouteTypeDef TIM_Route,uint16_t TIM_OCPreload)
 
 void PWMProducer_StructureandStart(PWMProducerTypeDef*PWMProducer);
 void PWM_chageRatio(PWMProducerTypeDef* PWMProducer, float ratio);
-
+double filterTIM_FREQ_DIV(PWMProducerTypeDef* PWMProducer)
+{
+	TIM_TypeDef* TIMx=filterTIM(PWMProducer->route);
+	if(TIMx==TIM1)
+	{
+		return TIM_FREQ_DIV1;
+	}else if(TIMx==TIM2)
+	{
+		return TIM_FREQ_DIV2;
+	}else if(TIMx==TIM3)
+	{
+		return TIM_FREQ_DIV3;
+	}else if(TIMx==TIM4)
+	{
+		return TIM_FREQ_DIV4;
+	}
+}
+double filterTIM_REAL_FREQ(PWMProducerTypeDef* PWMProducer)
+{
+	TIM_TypeDef* TIMx=filterTIM(PWMProducer->route);
+	if(TIMx==TIM1)
+	{
+		return TIM_REAL_FREQ1;
+	}else if(TIMx==TIM2)
+	{
+		return TIM_REAL_FREQ2;
+	}else if(TIMx==TIM3)
+	{
+		return TIM_REAL_FREQ3;
+	}else if(TIMx==TIM4)
+	{
+		return TIM_REAL_FREQ4;
+	}
+}
 void PWM_chageRatio(PWMProducerTypeDef* PWMProducer, float ratio)
 {
-	uint16_t Compare=TIM_REAL_FREQ/PWMProducer->frequency*ratio;
+	uint16_t Compare=filterTIM_REAL_FREQ(PWMProducer)/PWMProducer->frequency*ratio;
 
 	TIM_TypeDef* TIMx=filterTIM(PWMProducer->route);
 	if(PWMProducer->route%4==0)
@@ -159,8 +192,8 @@ void PWMStart(PWMProducerTypeDef*PWMProducer)
 	GPIO_Init(filterGPIO(PWMProducer->route), &GPIO_InitStructure);//###
 
 
-	TIM_TimeBaseStructure.TIM_Period =(u16)(TIM_REAL_FREQ/PWMProducer->frequency); //设置在下一个更新事件装入活动的自动重装载寄存器周期的值     80K
-	TIM_TimeBaseStructure.TIM_Prescaler =TIM_FREQ_DIV-1; //设置用来作为TIMx时钟频率除数的预分频值  不分频
+	TIM_TimeBaseStructure.TIM_Period =(u16)(filterTIM_REAL_FREQ(PWMProducer)/PWMProducer->frequency); //设置在下一个更新事件装入活动的自动重装载寄存器周期的值     80K
+	TIM_TimeBaseStructure.TIM_Prescaler =filterTIM_FREQ_DIV(PWMProducer)-1; //设置用来作为TIMx时钟频率除数的预分频值  不分频
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0; //设置时钟分割:TDTS = Tck_tim
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //TIM向上计数模式
 	TIM_TimeBaseInit(filterTIM(PWMProducer->route), &TIM_TimeBaseStructure); //###//根据TIM_TimeBaseInitStruct中指定的参数初始化TIMx的时间基数单位
@@ -173,7 +206,7 @@ void PWMStart(PWMProducerTypeDef*PWMProducer)
 	else
 		TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; //选择定时器模式:TIM脉冲宽度调制模式1
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; //比较输出使能
-	TIM_OCInitStructure.TIM_Pulse = TIM_REAL_FREQ/PWMProducer->frequency*PWMProducer->ratio; //设置待装入捕获比较寄存器的脉冲值
+	TIM_OCInitStructure.TIM_Pulse = filterTIM_REAL_FREQ(PWMProducer)/PWMProducer->frequency*PWMProducer->ratio; //设置待装入捕获比较寄存器的脉冲值
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High; //输出极性:TIM输出比较极性高
   TIM_OCxInit(PWMProducer->route,&TIM_OCInitStructure);
 
@@ -227,7 +260,7 @@ void PWMManager_changeFrequency(TIM_RouteTypeDef route,float frequency)
 		if(route==defaultPWMManager->PWMProducer[i].route)
 		{
 			defaultPWMManager->PWMProducer[i].frequency=frequency;
-			filterTIM(route)->ARR=(u16)(TIM_REAL_FREQ/defaultPWMManager->PWMProducer[i].frequency);
+			filterTIM(route)->ARR=(u16)(filterTIM_REAL_FREQ(&(defaultPWMManager->PWMProducer[i]))/defaultPWMManager->PWMProducer[i].frequency);
 			PWM_chageRatio(&defaultPWMManager->PWMProducer[i],defaultPWMManager->PWMProducer[i].ratio);
 			filterTIM(route)->CNT=0;
 		}

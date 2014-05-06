@@ -48,7 +48,7 @@ void IIC_Delay(void)
 TWI_START
 发送启动数据
 *******************************************************************/
-u8 IIC_Start(void)
+void IIC_Start_Super(void)
 {
 	SET_SDA;
 	IIC_DELAY;
@@ -58,7 +58,8 @@ u8 IIC_Start(void)
 
 	if( IIC_SDA_STATE == RESET )
 	{
-		return IIC_BUS_BUSY;
+		return ;
+		//return IIC_BUS_BUSY;
 	}
 
 	RESET_SDA;
@@ -69,17 +70,51 @@ u8 IIC_Start(void)
 
 	if( IIC_SDA_STATE == SET )
 	{
-		return IIC_BUS_ERROR;
+		return ;
+		//return IIC_BUS_ERROR;
+	}
+	return ;
+//	return IIC_BUS_READY;
+}
+u8 ii;
+void IIC_Start(void)
+{
+#ifndef IIC_SUPER_TASK
+	SET_SDA;
+	IIC_DELAY;
+
+	SET_SCL;
+	IIC_DELAY;
+
+	if( IIC_SDA_STATE == RESET )
+	{
+		return ;
+		//return IIC_BUS_BUSY;
 	}
 
-	return IIC_BUS_READY;
+	RESET_SDA;
+	IIC_DELAY;
+
+	RESET_SCL;
+	IIC_DELAY;
+
+	if( IIC_SDA_STATE == SET )
+	{
+		return ;
+		//return IIC_BUS_ERROR;
+	}
+#else
+	doTaskInSuperMode_vv(IIC_Start_Super,&ii);
+#endif
+	return ;
+	//return IIC_BUS_READY;
 }
 
 /*******************************************************************
 TWI_STOP
 发送停止数据
 *******************************************************************/
-void IIC_Stop(void)
+void IIC_StopSuper(void)
 {
 	RESET_SDA;
 	IIC_DELAY;
@@ -90,12 +125,26 @@ void IIC_Stop(void)
 	SET_SDA;
 	IIC_DELAY;
 }
+void IIC_Stop(void)
+{
+#ifndef IIC_SUPER_TASK
+	RESET_SDA;
+	IIC_DELAY;
 
+	SET_SCL;
+	IIC_DELAY;
+
+	SET_SDA;
+	IIC_DELAY;
+#else
+	doTaskInSuperMode_vv(IIC_StopSuper,0);
+#endif
+}
 /*******************************************************************************
 * 函数名称:TWI_SendNACK                                                                     
 * 描    述:收到数据,发送NACK                                                                                                                                       
  *******************************************************************************/
-void IIC_SendNACK(void)
+void IIC_SendNACKSuper(void)
 {
 	RESET_SDA;
 	IIC_DELAY;
@@ -104,12 +153,24 @@ void IIC_SendNACK(void)
 	RESET_SCL; 
 	IIC_DELAY; 
 }
-
+void IIC_SendNACK(void)
+{
+	#ifndef IIC_SUPER_TASK
+	RESET_SDA;
+	IIC_DELAY;
+	SET_SCL;
+	IIC_DELAY;
+	RESET_SCL; 
+	IIC_DELAY; 
+	#else
+		doTaskInSuperMode_vv(IIC_SendNACK,0);
+	#endif
+}
 /*******************************************************************************
 * 函数名称:TWI_SendACK                                                                     
 * 描    述:收到数据,发送ACK                                                                                                                                        
 *******************************************************************************/
-void IIC_SendACK(void)
+void IIC_SendACKSuper(void)
 {
 	SET_SDA;
 	IIC_DELAY;
@@ -118,12 +179,25 @@ void IIC_SendACK(void)
 	RESET_SCL; 
 	IIC_DELAY;
 }
+void IIC_SendACK(void)
+{
+	#ifndef IIC_SUPER_TASK
+	SET_SDA;
+	IIC_DELAY;
+	SET_SCL;
+	IIC_DELAY;
+	RESET_SCL; 
+	IIC_DELAY;
+	#else
+	doTaskInSuperMode_vv(IIC_SendACKSuper,0);
+	#endif
+}
 
 /*******************************************************************************
  * 函数名称:TWI_SendByte                                                                     
  * 描    述:发送一个字节                                                                                                                                      
  *******************************************************************************/
-u8 IIC_SendByte(u8 Data)
+u8 IIC_SendByteSuper(u8 Data)
 {
 	 u8 i;
 	 RESET_SCL;
@@ -164,12 +238,56 @@ u8 IIC_SendByte(u8 Data)
 		return IIC_ACK;  
 	 }    
 }
-
+u8 IIC_SendByte(u8 Data)
+{
+		#ifndef IIC_SUPER_TASK
+	 u8 i;
+	 RESET_SCL;
+	 for(i=0;i<8;i++)
+	 {  
+		//---------数据建立----------
+		if(Data&0x80)
+		{
+			SET_SDA;
+		}
+		else
+		{
+			RESET_SDA;
+		} 
+		Data<<=1;
+		IIC_DELAY;
+		//---数据建立保持一定延时----
+		//----产生一个上升沿[正脉冲] 
+		SET_SCL;
+		IIC_DELAY;
+		RESET_SCL;
+		IIC_DELAY;//延时,防止SCL还没变成低时改变SDA,从而产生START/STOP信号
+		//---------------------------   
+	 }
+	 //接收从机的应答 
+	 SET_SDA; 
+	 IIC_DELAY;
+	 SET_SCL;
+	 IIC_DELAY;   
+	 if(IIC_SDA_STATE)
+	 {
+		RESET_SCL;
+		return IIC_NACK;
+	 }
+	 else
+	 {
+		RESET_SCL;
+		return IIC_ACK;  
+	 }    
+	 #else 
+	  return doTaskInSuperMode_88(IIC_SendByteSuper,&Data);
+	 #endif
+}
 /*******************************************************************************
  * 函数名称:TWI_ReceiveByte                                                                     
  * 描    述:接收一个字节                                                                                                                                       
  *******************************************************************************/
-u8 IIC_RecvByte(void)
+u8 IIC_RecvByteSuper(void)
 {
 	 u8 i,Dat = 0;
 	 SET_SDA;
@@ -189,6 +307,31 @@ u8 IIC_RecvByte(void)
 	 }
 	 return Dat;
 }
+u8 IIC_RecvByte(void)
+{
+		#ifndef IIC_SUPER_TASK
+	 u8 i,Dat = 0;
+	 SET_SDA;
+	 RESET_SCL; 
+	 Dat=0;
+	 for(i=0;i<8;i++)
+	 {
+		SET_SCL;//产生时钟上升沿[正脉冲],让从机准备好数据 
+		IIC_DELAY; 
+		Dat<<=1;
+		if(IIC_SDA_STATE) //读引脚状态
+		{
+			Dat|=0x01; 
+		}   
+		RESET_SCL;//准备好再次接收数据  
+		IIC_DELAY;//等待数据准备好         
+	 }
+	 return Dat;
+	 #else
+	 return doTaskInSuperMode_8v(IIC_RecvByteSuper,0);
+	 #endif
+}
+
 
 /******单字节写入*******************************************/
 void Single_Write_IIC(u8 SlaveAddress,u8 REG_Address,u8 REG_data)
@@ -199,7 +342,6 @@ void Single_Write_IIC(u8 SlaveAddress,u8 REG_Address,u8 REG_data)
     IIC_SendByte(REG_data);       //内部寄存器数据， //请参考中文pdf22页 
     IIC_Stop();                   //发送停止信号
 }
-
 /********单字节读取*****************************************/
 u8 Single_Read_IIC(u8 SlaveAddress, u8 REG_Address)
 {  

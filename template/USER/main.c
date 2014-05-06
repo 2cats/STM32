@@ -1,17 +1,16 @@
-#include  "usart2.h"
+#include  "usart.h"
 #include "delay.h"
-#include "Protocol.h"
-#include "ServoManager.h"
-ServoManagerTypeTypeDef  ServoManager;
-int main()
+#include "MPU6050.h"
+#include "SuperTask.h"
+MPUDataTypeDef_T mpudata;
+int main(void)
 {
-	uart2_init(115200);
-	PT_EnableIRQ();
-	delay_init();
-	ServoManager_Struc_Init(&ServoManager,TIM1CHANNEL1);
-	ServoManager.changeAngle(&ServoManager,90);
+	uart_init(115200);
+	MPU6050_ALL_Initialize();
+
 	while(1)
 	{
-		delay_ms(1000);
+			MPU6050_GetTransformedData(&mpudata);
+	 		printf("%g,%g,%g\n",mpudata.accx,mpudata.accy,mpudata.accz);
 	}
 }
