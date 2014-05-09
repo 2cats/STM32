@@ -79,10 +79,10 @@ unsigned char PID_Compute()
 		/*Compute all the working error variables*/
 		 input = *defaultPID->input;
 		 error = *defaultPID->target - input;
-		_PID_ITerm+= (_PID_ki * error);
+		_PID_ITerm+= (_PID_ki * error);//积分项采用Sum(_PID_ki * error)而不是Sum(error)*_PID_ki可以避免I参数改变时，积分项可能产生的剧变
 		if(_PID_ITerm > defaultPID->outMax) _PID_ITerm= defaultPID->outMax;
 		else if(_PID_ITerm < defaultPID->outMin) _PID_ITerm= defaultPID->outMin;
-	  dInput = (input - _PID_lastInput);
+	  dInput = (input - _PID_lastInput);//若target不变则dError=-dInput，这么做可以避免Target改变时微分项可能产生的剧变
 
 		/*Compute PID Output*/
 	  output = _PID_kp * error + _PID_ITerm- _PID_kd * dInput;
@@ -150,4 +150,5 @@ void PID_SetDirection(int Direction)
    }   
     defaultPID->direction= Direction;
 }
+
 

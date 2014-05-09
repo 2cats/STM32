@@ -76,7 +76,6 @@ void IIC_Start_Super(void)
 	return ;
 //	return IIC_BUS_READY;
 }
-u8 ii;
 void IIC_Start(void)
 {
 #ifndef IIC_SUPER_TASK
@@ -104,7 +103,7 @@ void IIC_Start(void)
 		//return IIC_BUS_ERROR;
 	}
 #else
-	doTaskInSuperMode_vv(IIC_Start_Super,&ii);
+	doTaskInSuperMode_vv(IIC_Start_Super,0);
 #endif
 	return ;
 	//return IIC_BUS_READY;

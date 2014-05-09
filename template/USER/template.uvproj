@@ -413,6 +413,11 @@
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
             </File>
+            <File>
+              <FileName>BCar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BCar.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -745,6 +750,26 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>USMART</GroupName>
+          <Files>
+            <File>
+              <FileName>usmart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\USMART\usmart.c</FilePath>
+            </File>
+            <File>
+              <FileName>usmart_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\USMART\usmart_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>usmart_str.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\USMART\usmart_str.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -860,7 +885,7 @@
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
           <Simulator>
-            <UseSimulator>1</UseSimulator>
+            <UseSimulator>0</UseSimulator>
             <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
             <RunToMain>1</RunToMain>
             <RestoreBreakpoints>1</RestoreBreakpoints>
@@ -871,7 +896,7 @@
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
           </Simulator>
           <Target>
-            <UseTarget>0</UseTarget>
+            <UseTarget>1</UseTarget>
             <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
             <RunToMain>1</RunToMain>
             <RestoreBreakpoints>1</RestoreBreakpoints>
@@ -882,13 +907,13 @@
             <RestoreTracepoints>0</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>5</TargetSelection>
+          <TargetSelection>7</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile>C:\Users\wang\Desktop\shell.ini</InitializationFile>
+            <InitializationFile>..\JLINK\virtualCOM.ini</InitializationFile>
           </SimDlls>
           <TargetDlls>
             <CpuDll></CpuDll>
@@ -910,7 +935,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -1098,7 +1123,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\USER;..\LIB\inc;..\CORE;..\FATFS\src;..\FATFS\SPI;..\FATFS\SD;..\mpu6050\I2C_analog;..\mpu6050\mpu600;..\UTILS\delay;..\UTILS\Filter;..\UTILS\usart;..\UTILS\millis;..\UTILS\PID;..\UTILS\sys;..\UTILS\ADCManager;..\UTILS\EXTIManager;..\UTILS\InputCatcher;..\UTILS\USARTBufReceiever;..\UTILS\DS18B20;..\UTILS\PWMManager;..\UTILS\USART2BufReceiever;..\UTILS\usart2;..\UCGUI\LIB;..\probe;..\probe\inc;..\UCGUI\inc;..\UTILS\OLED;..\UTILS\KeyFSM;..\UltraProbe;..\UTILS\PID_AutoTune;..\UTILS\THB7128;..\UTILS\RTC;..\UTILS\Protocol;..\UTILS\NRF24L01;..\UTILS\spi;..\UTILS\LCD;..\UTILS\doEvery;..\UTILS\DACManager;..\UTILS\ServoManager;..\UTILS\SuperTask</IncludePath>
+              <IncludePath>..\USER;..\LIB\inc;..\CORE;..\FATFS\src;..\FATFS\SPI;..\FATFS\SD;..\mpu6050\I2C_analog;..\mpu6050\mpu600;..\UTILS\delay;..\UTILS\Filter;..\UTILS\usart;..\UTILS\millis;..\UTILS\PID;..\UTILS\sys;..\UTILS\ADCManager;..\UTILS\EXTIManager;..\UTILS\InputCatcher;..\UTILS\USARTBufReceiever;..\UTILS\DS18B20;..\UTILS\PWMManager;..\UTILS\USART2BufReceiever;..\UTILS\usart2;..\UCGUI\LIB;..\probe;..\probe\inc;..\UCGUI\inc;..\UTILS\OLED;..\UTILS\KeyFSM;..\UltraProbe;..\UTILS\PID_AutoTune;..\UTILS\THB7128;..\UTILS\RTC;..\UTILS\Protocol;..\UTILS\NRF24L01;..\UTILS\spi;..\UTILS\LCD;..\UTILS\doEvery;..\UTILS\DACManager;..\UTILS\ServoManager;..\UTILS\SuperTask;..\UTILS\USMART</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1153,6 +1178,11 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>BCar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BCar.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1483,6 +1513,26 @@
               <FileName>LCD.lib</FileName>
               <FileType>4</FileType>
               <FilePath>..\UCGUI\LIB\LCD.lib</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USMART</GroupName>
+          <Files>
+            <File>
+              <FileName>usmart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\USMART\usmart.c</FilePath>
+            </File>
+            <File>
+              <FileName>usmart_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\USMART\usmart_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>usmart_str.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\USMART\usmart_str.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1895,6 +1945,11 @@
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
             </File>
+            <File>
+              <FileName>BCar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BCar.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2224,6 +2279,26 @@
               <FileName>LCD.lib</FileName>
               <FileType>4</FileType>
               <FilePath>..\UCGUI\LIB\LCD.lib</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USMART</GroupName>
+          <Files>
+            <File>
+              <FileName>usmart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\USMART\usmart.c</FilePath>
+            </File>
+            <File>
+              <FileName>usmart_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\USMART\usmart_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>usmart_str.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UTILS\USMART\usmart_str.c</FilePath>
             </File>
           </Files>
         </Group>

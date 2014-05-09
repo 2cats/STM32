@@ -25,6 +25,7 @@
 #include "stm32f10x_it.h" 
 //#include "UltraProbe.h"
 #include "Protocol.h"
+#include "SuperTask.h"
 void NMI_Handler(void)
 {
 }
@@ -37,10 +38,10 @@ void HardFault_Handler(void)
   }
 }
 
-void USART2_IRQHandler(void)
-{
-	PT_IRq_Handler();
-}
+//void USART2_IRQHandler(void)
+//{
+//	PT_IRq_Handler();
+//}
 
  
 void MemManage_Handler(void)

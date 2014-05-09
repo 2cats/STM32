@@ -141,6 +141,7 @@ double filterTIM_FREQ_DIV(PWMProducerTypeDef* PWMProducer)
 	{
 		return TIM_FREQ_DIV4;
 	}
+	return 0;
 }
 double filterTIM_REAL_FREQ(PWMProducerTypeDef* PWMProducer)
 {
@@ -158,6 +159,7 @@ double filterTIM_REAL_FREQ(PWMProducerTypeDef* PWMProducer)
 	{
 		return TIM_REAL_FREQ4;
 	}
+	return 0;
 }
 void PWM_chageRatio(PWMProducerTypeDef* PWMProducer, float ratio)
 {

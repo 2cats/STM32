@@ -13,6 +13,15 @@ void MPU6050_GetTransformedData(MPUDataTypeDef_T* mpudata)//ACC->g   GYRO->rad/s
 
 
 */
+
+#define ACCX_OFFEST	0.074462890625
+#define ACCY_OFFEST	-0.1337890625
+#define ACCZ_OFFEST 0
+#define GYROX_OFFEST		-0.0122572704
+#define GYROY_OFFEST		-0.055957104
+#define GYROZ_OFFEST		-0.0103920336
+
+
 #define	SMPLRT_DIV		0x19	//陀螺仪采样率，典型值：0x07(125Hz)
 #define	CONFIG			0x1A	//低通滤波频率，典型值：0x06(5Hz)
 #define	GYRO_CONFIG		0x1B	//陀螺仪自检及测量范围，典型值：0x18(不自检，2000deg/s)

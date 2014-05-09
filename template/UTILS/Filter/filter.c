@@ -56,7 +56,7 @@ double Complementary1_getAngle(double angle_acc, double angle_gyro_speed, double
 }
 double Complementary2_getAngle(double angle_acc, double angle_gyro_speed, double timedelta)//angle_gyro_speed½ÇËÙ¶È
 {
-		double  y1,x2,x1;
+		double  y1=0,x2=0,x1=0;
     x1 = (angle_acc - DefaultComplementaryFilter->lastfilted ) * DefaultComplementaryFilter->K * DefaultComplementaryFilter->K;
     y1 = y1 + x1 * timedelta;
     x2 = y1 + 2 * DefaultComplementaryFilter->K *(angle_acc - DefaultComplementaryFilter->lastfilted ) + angle_gyro_speed;

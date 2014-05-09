@@ -11,6 +11,8 @@ typedef	 void(*SVC_VOID_VOID_FuncDef)(void);
 
 typedef  unsigned long(*SVCDefaultFuncTypeDef)(unsigned long svc_r0, unsigned long svc_r1, unsigned long svc_r2, unsigned long svc_r3);
 
+
+void __svc(0X02) doTaskInSuperMode_null(void);
 unsigned long __svc(SVC_U8_U8_TYPE) doTaskInSuperMode_88(void*funcP, void* arg);
 unsigned long __svc(SVC_U8_VOID_TYPE) doTaskInSuperMode_8v(void*funcP, void*arg);
 unsigned long __svc(SVC_VOID_U8_TYPE) doTaskInSuperMode_v8(void*funcP, void*arg);
