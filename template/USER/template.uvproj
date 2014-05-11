@@ -744,9 +744,9 @@
               <FilePath>..\probe\obj\prob_lib_creator.lib</FilePath>
             </File>
             <File>
-              <FileName>LCD.lib</FileName>
+              <FileName>LCD_TFT.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>..\UCGUI\LIB\LCD.lib</FilePath>
+              <FilePath>..\UCGUI\TFT_PROJ\OBJ\LCD_TFT.lib</FilePath>
             </File>
           </Files>
         </Group>
@@ -778,13 +778,13 @@
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32F103T8</Device>
+          <Device>STM32F103ZE</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <Cpu>IRAM(0x20000000-0x20004FFF) IROM(0x8000000-0x800FFFF) CLOCK(8000000) CPUTYPE("Cortex-M3")</Cpu>
+          <Cpu>IRAM(0x20000000-0x2000FFFF) IROM(0x8000000-0x807FFFF) CLOCK(8000000) CPUTYPE("Cortex-M3")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
-          <StartupFile>"STARTUP\ST\STM32F10x\startup_stm32f10x_md.s" ("STM32 Medium Density Line Startup Code")</StartupFile>
-          <FlashDriverDll>UL2CM3(-O14 -S0 -C0 -N00("ARM Cortex-M3") -D00(1BA00477) -L00(4) -FO7 -FD20000000 -FC800 -FN1 -FF0STM32F10x_128 -FS08000000 -FL010000)</FlashDriverDll>
-          <DeviceId>4403</DeviceId>
+          <StartupFile>"STARTUP\ST\STM32F10x\startup_stm32f10x_hd.s" ("STM32 High Density Line Startup Code")</StartupFile>
+          <FlashDriverDll>UL2CM3(-O14 -S0 -C0 -N00("ARM Cortex-M3") -D00(1BA00477) -L00(4) -FO7 -FD20000000 -FC800 -FN1 -FF0STM32F10x_512 -FS08000000 -FL080000)</FlashDriverDll>
+          <DeviceId>4216</DeviceId>
           <RegisterFile>stm32f10x.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
@@ -870,11 +870,11 @@
           <SimDllName>SARMCM3.DLL</SimDllName>
           <SimDllArguments></SimDllArguments>
           <SimDlgDll>DARMSTM.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pSTM32F103T8</SimDlgDllArguments>
+          <SimDlgDllArguments>-pSTM32F103ZE</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
           <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>TARMSTM.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pSTM32F103T8</TargetDlgDllArguments>
+          <TargetDlgDllArguments>-pSTM32F103ZE</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -935,7 +935,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -1040,12 +1040,12 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x5000</Size>
+                <Size>0x10000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0x80000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -1070,7 +1070,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0x80000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -1095,7 +1095,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x5000</Size>
+                <Size>0x10000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -1121,7 +1121,7 @@
             <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F10X_MD,USE_STDPERIPH_DRIVER</Define>
+              <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
               <IncludePath>..\USER;..\LIB\inc;..\CORE;..\FATFS\src;..\FATFS\SPI;..\FATFS\SD;..\mpu6050\I2C_analog;..\mpu6050\mpu600;..\UTILS\delay;..\UTILS\Filter;..\UTILS\usart;..\UTILS\millis;..\UTILS\PID;..\UTILS\sys;..\UTILS\ADCManager;..\UTILS\EXTIManager;..\UTILS\InputCatcher;..\UTILS\USARTBufReceiever;..\UTILS\DS18B20;..\UTILS\PWMManager;..\UTILS\USART2BufReceiever;..\UTILS\usart2;..\UCGUI\LIB;..\probe;..\probe\inc;..\UCGUI\inc;..\UTILS\OLED;..\UTILS\KeyFSM;..\UltraProbe;..\UTILS\PID_AutoTune;..\UTILS\THB7128;..\UTILS\RTC;..\UTILS\Protocol;..\UTILS\NRF24L01;..\UTILS\spi;..\UTILS\LCD;..\UTILS\doEvery;..\UTILS\DACManager;..\UTILS\ServoManager;..\UTILS\SuperTask;..\UTILS\USMART</IncludePath>
             </VariousControls>
@@ -1510,9 +1510,9 @@
               <FilePath>..\probe\obj\prob_lib_creator.lib</FilePath>
             </File>
             <File>
-              <FileName>LCD.lib</FileName>
+              <FileName>LCD_TFT.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>..\UCGUI\LIB\LCD.lib</FilePath>
+              <FilePath>..\UCGUI\TFT_PROJ\OBJ\LCD_TFT.lib</FilePath>
             </File>
           </Files>
         </Group>
@@ -2276,9 +2276,9 @@
               <FilePath>..\probe\obj\prob_lib_creator.lib</FilePath>
             </File>
             <File>
-              <FileName>LCD.lib</FileName>
+              <FileName>LCD_TFT.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>..\UCGUI\LIB\LCD.lib</FilePath>
+              <FilePath>..\UCGUI\TFT_PROJ\OBJ\LCD_TFT.lib</FilePath>
             </File>
           </Files>
         </Group>

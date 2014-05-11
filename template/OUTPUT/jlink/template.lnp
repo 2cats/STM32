@@ -62,7 +62,7 @@
 "..\output\jlink\iic_analog.o"
 "..\output\jlink\interrupt.o"
 "..\probe\obj\prob_lib_creator.lib"
-"..\UCGUI\LIB\LCD.lib"
+"..\UCGUI\TFT_PROJ\OBJ\LCD_TFT.lib"
 "..\output\jlink\usmart.o"
 "..\output\jlink\usmart_config.o"
 "..\output\jlink\usmart_str.o"

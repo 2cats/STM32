@@ -10,8 +10,12 @@
 //0.18
 #define MOTOR_BACK_SCALE	1
 #define MOTORB_OFFSET	0.02
+#define CONTROL_SPEED 0.3
+#define CONTROL_SPEED_FB 0.1
 void Motor_Init(void);
 void WriteAllMotors(double ratio);
 void StopAllMotors(void);
+void WriteLRMotors(double L,double R);
 u8 setPID(int p,int i,int d);
+void BT_Talk();
 #endif

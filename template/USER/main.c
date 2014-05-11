@@ -6,28 +6,31 @@
 #include "BCar.h"
 #include "filter.h"
 #include "usmart.h"
+#include "USART2BufReceiever.h" 
 #define PID_MAX	(1-MOTOR_DEAD_LINE)
 #define PID_INTERVAL 10
 ComplementaryFilterTypeDef ComplementaryFilter;
-
-double PID_input,PID_output,PID_target=0.1;
+USART2BufReceieverTypeDef USARTBufReceiever;
+extern u8 FB_ENABLED;
+double PID_input,PID_output,PID_target=0.001;
 PIDTypeDef PID;
 MPUDataTypeDef_T sensorData;
+double PWMcontol_L=0,PWMcontol_R=0;
 void balanceProc(void)
 {
   if(PID.Compute())//用角速度作为微分项进行PID运算
 	{
-//		if(PID_input>0.9||PID_input<-0.9)
-//		StopAllMotors();
-//		else
-		WriteAllMotors(PID_output);
-		//printf("%g,%g\n",sensorData.accx,PID_input);
-		//	printf("out:%g,int:%g/n",PID_output,PID_input);
+		//WriteAllMotors(PID_output+PWMcontol);
+//		uart2_printf("hello\n");
+//		if(FB_ENABLED)
+//		{
+//			PWMcontol_L+=CONTROL_SPEED_FB;
+//			PWMcontol_R=PWMcontol_L;
+//		}
+		
+		WriteLRMotors(PID_output+PWMcontol_L,PID_output+PWMcontol_R);
 		MPU6050_GetTransformedData(&sensorData);
-		//printf("%g,%g,%g  %g,%g,%g\n",sensorData.accx,sensorData.accy,sensorData.accz,sensorData.gyrox,sensorData.gyroy,sensorData.gyroz);
-		//PID_input=KalmanFilter.getAngle(sensorData.accx,sensorData.gyroy,PID_INTERVAL);
 		PID_input=ComplementaryFilter.getAngle( sensorData.accx,  sensorData.gyroy,  PID_INTERVAL/1000.0);
-
 	}
 	else
 	{
@@ -43,7 +46,8 @@ void PIDConfigure()
 void All_Init()
 {
 	delay_init();
-  uart_init(115200);
+//uart_init(115200);
+	uart2_init_BR(115200,&USARTBufReceiever);
 	MPU6050_ALL_Initialize();
 	Motor_Init();
 	PIDConfigure();
@@ -53,22 +57,22 @@ void All_Init()
 	MPU6050_GetTransformedData(&sensorData);
 	//KalmanFilter.setStartAngle(sensorData.accy);
 	ComplementaryFilter_Init(&ComplementaryFilter,2,0.9);
-	usmart_init(0,115200);
+	//usmart_init(0,115200);
 }
-
+u32 time=0;
 int main()
 {
 
 	All_Init();
 	while(1)
 	{
-		//WriteAllMotors(-0.07);
 		balanceProc();
-		usmart_scan();
-		//MPU6050_GetTransformedData(&sensorData);
-		//printf("%g,%g,%g  %g,%g,%g\n",sensorData.accx,sensorData.accy,sensorData.accz,sensorData.gyrox,sensorData.gyroy,sensorData.gyroz);
+		 BT_Talk();
+		if(millis()-time>1000)
+		{
+			time=millis();
+			uart2_printf("%4g,%4g\n",PWMcontol_L,PWMcontol_R);
+		}
+		//usmart_scan();
 	}
 }
-
-
-

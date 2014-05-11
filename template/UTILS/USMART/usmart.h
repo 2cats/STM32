@@ -1,12 +1,11 @@
 #ifndef __USMART_H
 #define __USMART_H	  		  
 #include "usmart_str.h"
-#define USEING_USMART 2
+#define USEING_USMART 0
 #ifdef USEING_USMART
 #if USEING_USMART==1
 #define usmart_printf printf
-#endif
-#if USEING_USMART==2
+#else 
 #define usmart_printf uart2_printf
 #endif
 #endif
