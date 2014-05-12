@@ -38,10 +38,10 @@ void HardFault_Handler(void)
   }
 }
 
-void USART2_IRQHandler(void)
-{
-	PT_IRq_Handler();
-}
+//void USART2_IRQHandler(void)
+//{
+//	PT_IRq_Handler();
+//}
 
  
 void MemManage_Handler(void)

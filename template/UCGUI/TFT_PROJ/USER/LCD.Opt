@@ -622,9 +622,9 @@ OPTFFF 12,593,1,0,0,0,0,0,<..\GUI\MultiLayer\LCD_1.c><LCD_1.c>
 OPTFFF 12,594,1,0,0,0,0,0,<..\GUI\MultiLayer\LCD_2.c><LCD_2.c> 
 OPTFFF 12,595,1,0,0,0,0,0,<..\GUI\MultiLayer\LCD_3.c><LCD_3.c> 
 OPTFFF 12,596,1,0,0,0,0,0,<..\GUI\MultiLayer\LCD_4.c><LCD_4.c> 
-OPTFFF 13,597,5,0,0,0,0,0,<..\GUI\Config\GUIConf.h><GUIConf.h> 
+OPTFFF 13,597,5,369098752,0,10,29,0,<..\GUI\Config\GUIConf.h><GUIConf.h> 
 OPTFFF 13,598,5,0,0,0,0,0,<..\GUI\Config\GUITouchConf.h><GUITouchConf.h> 
-OPTFFF 13,599,5,0,0,0,0,0,<..\GUI\Config\LCDConf.h><LCDConf.h> 
+OPTFFF 13,599,5,33554432,0,9,18,0,<..\GUI\Config\LCDConf.h><LCDConf.h> 
 OPTFFF 14,600,1,83886080,0,0,0,0,<..\GUI\GUI_X\GUI_X.c><GUI_X.c> { 44,0,0,0,0,0,0,0,1,0,0,0,255,255,255,255,255,255,255,255,252,255,255,255,226,255,255,255,22,0,0,0,29,0,0,0,230,3,0,0,86,1,0,0 }
 
 

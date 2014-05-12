@@ -12,10 +12,11 @@
 #define MOTORB_OFFSET	0.02
 #define CONTROL_SPEED 0.3
 #define CONTROL_SPEED_FB 0.1
+#define VIRTICAL_ANGLE 	0.05
 void Motor_Init(void);
 void WriteAllMotors(double ratio);
 void StopAllMotors(void);
 void WriteLRMotors(double L,double R);
 u8 setPID(int p,int i,int d);
-void BT_Talk();
+void BT_Talk(void);
 #endif

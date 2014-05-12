@@ -4,10 +4,10 @@
 #include "USART2BufReceiever.h" 
 PWMManagerTypeDef PWMManager;
 
-u8 FB_ENABLED=0;
 extern PIDTypeDef PID;
-extern USART2BufReceieverTypeDef USARTBufReceiever;
+extern USART2BufReceieverTypeDef USART2BufReceiever;
 extern double PWMcontol_L,PWMcontol_R;
+extern double PID_target;
 void Motor_Init(void)
 {
 		PWMManagerStructure(&PWMManager);
@@ -84,31 +84,27 @@ u8 setPID(int p,int i,int d)
 #define CONTROL_RIGHT	'2'
 void BT_Talk()
 {
-	if(USARTBufReceiever.getAvaliableNum()>0)
+	if(USART2BufReceiever.getAvaliableNum()>0)
 	{
-		switch(USARTBufReceiever.getByte())
+		switch(USART2BufReceiever.getByte())
 		{
 			case CONTROL_STOP:
 				PWMcontol_L=PWMcontol_R=0;
-				FB_ENABLED=0;
+				PID_target=VIRTICAL_ANGLE;
 				break;
 			case CONTROL_FORW:
-				PWMcontol_L=PWMcontol_R=CONTROL_SPEED_FB;
-				FB_ENABLED=1;
+				PID_target=VIRTICAL_ANGLE+0.15;
 				break;
 			case CONTROL_BACK:
-				PWMcontol_L=PWMcontol_R=-CONTROL_SPEED_FB;
-				FB_ENABLED=1;
+				PID_target=VIRTICAL_ANGLE-0.15;
 				break;
 			case CONTROL_LEFT:
 					PWMcontol_L=CONTROL_SPEED;
 					PWMcontol_R=0;
-					FB_ENABLED=0;
 				break;
 			case CONTROL_RIGHT:
 					PWMcontol_L=0;
 					PWMcontol_R=CONTROL_SPEED;
-					FB_ENABLED=0;
 				break;
 		}
 	}

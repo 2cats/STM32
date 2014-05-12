@@ -1,4 +1,4 @@
-#include"KeyFSM.h"
+#include "KeyFSM.h"
 #include "millis.h"
 #include "stm32f10x.h"
 /*************键盘状态机****************/
@@ -38,7 +38,7 @@ Example:
 		printf("Press\n");
 	}  
 	KeyFSMTypeDef aKeyFSM;      
-	Key_FSM_Structure(&aKeyFSM,GPIOB,GPIO_Pin_0,300);//300表示双击的间隔等待时长（ms）
+	Key_FSM_Structure(&aKeyFSM,GPIOB,GPIO_Pin_0,250);//300表示双击的间隔等待时长（ms）
 	aKeyFSM.doWhenRelease=doWhenRelease;
 	aKeyFSM.doWhenClick=doWhenClick;
 	//aKeyFSM.doWhenPress=doWhenPress;
