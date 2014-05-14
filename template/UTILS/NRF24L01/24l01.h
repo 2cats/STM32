@@ -59,11 +59,17 @@
                               //bit4,TX FIFO空标志;bit5,TX FIFO满标志;bit6,1,循环发送上一数据包.0,不循环;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //24L01操作线
-#define NRF24L01_GPIO	GPIOA
-#define NRF24L01_GPIO_RCC RCC_APB2Periph_GPIOA
-#define NRF24L01_Pin_CE		GPIO_Pin_4
+//#define NRF24L01_GPIO	GPIOA
+//#define NRF24L01_GPIO_RCC RCC_APB2Periph_GPIOA
+//#define NRF24L01_Pin_CE		GPIO_Pin_4
+//#define NRF24L01_Pin_CSN	GPIO_Pin_7
+//#define NRF24L01_Pin_IRQ	GPIO_Pin_5
+
+#define NRF24L01_GPIO	GPIOG
+#define NRF24L01_GPIO_RCC RCC_APB2Periph_GPIOG
+#define NRF24L01_Pin_CE		GPIO_Pin_6
 #define NRF24L01_Pin_CSN	GPIO_Pin_7
-#define NRF24L01_Pin_IRQ	GPIO_Pin_5
+#define NRF24L01_Pin_IRQ	GPIO_Pin_8
 
 /////////////////////////////////////
 #define NRF24L01_CE_HIGH		GPIO_SetBits(NRF24L01_GPIO,NRF24L01_Pin_CE);

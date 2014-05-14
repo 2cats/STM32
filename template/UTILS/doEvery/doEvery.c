@@ -2,14 +2,17 @@
 
 /******INTERFACE*********/
 /*
-
+功能：每隔多少ms或us执行一段代码
 void doEvery(enum DoEvery_Resolution resolution,uint16_t proportion,void(*doIt)(void));
 
-DoEvery_Resolution:			
+DoEvery_Resolution:毫秒还是微妙		
 			DoEvery_Ms	/			DoEvery_Us
-proportion	
-			<MAX>	:				6000				/			65536
-			<MIN>	:				1
+proportion	具体间隔时间			
+		————————————————————————--
+		|							DoEvery_Ms			  DoEvery_Us	 	|
+		|	<最大值>	:				6000			/			65536				|
+		|	<最小值>	:				1					/			1						|
+		-----------------------------------------------
 同时还可提供定时器版millis/uillis功能：xillis功能为millis/uillis中其一，取决于doEvery（resolution,,)
 
 */
@@ -18,9 +21,8 @@ proportion
 /*
 	proportion不要超过最大值
 	回调函数注意时间长度
-	中断和InputCatcher中断
-	proportion
-	
+	中断和InputCatcher中断可能冲突
+
 	使用xillis时：
 		1.回调函数严格控制时间长度，或者直接无回调，doIt=0
 		2.xillis功能为millis/uillis中其一
@@ -113,12 +115,12 @@ unsigned long TIM_xillis(void)
 {
 	return DoEvery_xillis_count;
 }
-void DO_EVERY_IRQ_Handler(void)
-{
-	if(defaultDoEvery!=0)
-	{
-		defaultDoEvery();
-	}
-	DoEvery_xillis_count++;
-	DO_EVERY_TIM->SR&=~((uint16_t)1);
-}
+//void DO_EVERY_IRQ_Handler(void)
+//{
+//	if(defaultDoEvery!=0)
+//	{
+//		defaultDoEvery();
+//	}
+//	DoEvery_xillis_count++;
+//	DO_EVERY_TIM->SR&=~((uint16_t)1);
+//}

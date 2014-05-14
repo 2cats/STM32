@@ -1,5 +1,5 @@
 #include "USARTBufReceiever.h" 
-
+//串口1环型缓存器，提供获取串口接收中断数据的简易接口
 
 /*************!WARNING!******************/
 /*
@@ -9,7 +9,7 @@
 /************INTERFACE*****************/
 /*
 
-Example:
+Old Example:
 	USARTBufReceieverTypeDef USARTBufReceiever;
 	USARTBufReceiever_Structure(&USARTBufReceiever);
 	uart_init(115200);
@@ -23,7 +23,7 @@ Example:
 */
 /************UPDATE*****************/
 /*
-2013/4/3
+2014/4/3
 	new Function : uart_init_BR
 	Example:
 		USARTBufReceieverTypeDef USARTBufReceiever;

@@ -1,4 +1,9 @@
 #include "Protocol.h"
+
+
+/******这是一个（串口）通信协议********/
+//使用时，自己填写对应的接收代码，解析代码，默认串口2中断接收（注意不可和环形缓冲器同时共用）
+
 static unsigned char PT_FSM_STATE=PT_SM_IDLE;
 static unsigned char PT_FSM_BUF[10][PT_PERDATA_BUF_SIZE];
 static unsigned char PT_PACKAGE_LENGTH=0;

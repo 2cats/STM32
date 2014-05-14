@@ -5,7 +5,7 @@
 //2CATS
 void MPU6050_ALL_Initialize(void)
 {
-	IIC_GPIO_Configuration( IIC_GOIO_SDA , IIC_SDA , IIC_GPIO_SCL , IIC_SCL );//初始化IIC硬件
+	IIC_GPIO_Configuration( );//初始化IIC硬件
 	MPU6050_Initialize();//初始化MPU6050
 }
 char getWho(void)

@@ -3,37 +3,61 @@
 #include "PWMManager.h"
 #include "InputCatcher.h"
 #include "delay.h"
-static PWMManagerTypeDef PWMManager;
-static InputCatchManagerTypeDef InputCatchManager;
-#define IR_CHANNEL	TIM2CHANNEL1
-void IRsend_mark(int time) {
-  // Sends an IR mark for the specified number of microseconds.
-  // The mark output is modulated at the PWM frequency.
-  PWMManager.changeRatio(IR_CHANNEL,0.5); // Enable pin 3 PWM output
-  delay_ms(time);
-}
+/********* Config **********/
+//IR_FREQ ，典型值：38000  【范围：使 72000000/IR_FREQ 在0-65536之间，不可太接近于0，即IR_FREQ不可过大】
+#define IR_FREQ	38000
 
-/* Leave pin off for time (given in microseconds) */
-void IRsend_space(int time) {
-  // Sends an IR space for the specified number of microseconds.
-  // A space is no output, so the PWM output is disabled.
-  PWMManager.changeRatio(IR_CHANNEL,0); // Enable pin 3 PWM output
-  delay_ms(time);
-}
-void IRrecv_Init(void)
-{
+//载波占空比，典型值：0.5
+#define IR_RATIO	0.5
 
-		InputCatchManagerStructure(&InputCatchManager);
-		InputCatchManager.startCatching(TIM3CHANNEL2,HIGH_LOW_HIGH_DURATION,1);//TIM3CHANNEL2捕获高电平时间，分辨率1us
-		InputCatchManager.setDoWhenDone(TIM3CHANNEL2,doSomeThing);//optional
-		InputCatchManager.setDoWhenTimeout(TIM3CHANNEL2,doSomeThingWhenTimeout);//optional
-}
-void IRsend_Init(void)
+//红外接收引脚，低电平表示有载波信号
+#define IR_RECV_CHANNEL	TIM4CHANNEL4
+
+//红外发射引脚，不能和接收引脚使用同一个定时器
+#define IR_SEND_CHANNEL	TIM3CHANNEL1
+#define IR_RECV_BUF_LEN	100
+
+/*--------------------------*/
+
+typedef unsigned short IR_DATA_TYPE;
+typedef struct 
 {
-		PWMManagerStructure(&PWMManager);
-		PWMManager.ProduceNewPWM(IR_CHANNEL,38000,0);
-}
-void IRsend_enableIROut(int khz) {
-	PWMManager.changeFrequency(IR_CHANNEL,khz);
-}
+	IR_DATA_TYPE data[IR_RECV_BUF_LEN];
+	unsigned int length;
+}IR_RawDataTypeDef;
+extern void (*IRrecv_DoWhenDone)(IR_RawDataTypeDef *);
+extern void (*IRrecv_DoWhenFlow)(void);
+void IRsend_DoWhenCathed1(struct InputCatcherType*t);
+void IRsend_DoWhenTimeout(struct InputCatcherType*t);
+void IRsend_mark(IR_DATA_TYPE time);
+void IRsend_space(IR_DATA_TYPE time);
+void IRrecv_Init(void);
+void IRsend_Init(void);
+void IR_SendRaw(IR_RawDataTypeDef *rawData);
+void IR_SendDefault(void);
+void IRsend_RawDataCpy(IR_RawDataTypeDef*dest,IR_RawDataTypeDef*src);
+
+
+/********** NEC ***********/
+
+#define _1_SPACE_LEN	560
+#define _1_MARK_LEN	1680
+
+#define _0_SPACE_LEN	560
+#define _0_MARK_LEN	560
+
+#define NEC_LEADER_SPACE_LEN 	9000
+#define NEC_LEADER_MARK_LEN 	4500
+
+#define BIT_TOLERATION 	250
+
+typedef struct 
+{
+	unsigned char address;
+	unsigned char command;
+}NEC_DataTypeDef;
+char NEC_Parse(IR_RawDataTypeDef* rawData,NEC_DataTypeDef *NEC_Data);
+
+void IR_SendNEC(NEC_DataTypeDef *NEC_Data);
+/*--------------------------*/
 #endif 

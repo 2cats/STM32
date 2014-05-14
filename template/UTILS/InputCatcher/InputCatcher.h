@@ -5,8 +5,7 @@
 
 /***********************************/
 //defines
-//#define CATCH_CONTINUOUS 1
-//#define CATCH_ONCE 0
+#define CATCHING_FLOW_SIZE	0x01
 
 #define GETFLAG(x)   ((catchWhat_Flag>>x)&1)
 #define SETFLAG(x)   (catchWhat_Flag|=(1<<x))
@@ -54,26 +53,19 @@ typedef struct InputCatcherType
 	TIM_RouteTypeDef route;
 	double resolution;
 	void (*doWhenDone)(struct InputCatcherType*);
-//	void (*doWhenRatioChanged)(struct InputCatcherType*);
 	void (*doWhenTimeout)(struct InputCatcherType*);
 	CatchWhatTypeDef catchWhat;
 	double duration;
 	double ratio;
 	double duty; 
-//	double lastDuration;
-//	double lastRatio;
-//	double lastDuty; 
-//	double ratio_offet;
+
 }InputCatcherTypeDef;
 typedef struct InputCatchManagerType
 {
 	InputCatcherTypeDef InputCatcher[16];
 	void (*startCatching)(TIM_RouteTypeDef Route,CatchWhatTypeDef catchWhat,double resolution);
 	void (*setDoWhenDone)(TIM_RouteTypeDef Route,	void (*func)(struct InputCatcherType*));
-//void (*setDoWhenRatioChanged)(TIM_RouteTypeDef Route,	double offset,void (*func)(struct InputCatcherType*));
 	void (*setDoWhenTimeout)(TIM_RouteTypeDef Route,	void (*func)(struct InputCatcherType*));
-	//u8  (*isCatchingDone)(TIM_RouteTypeDef Route);
-	//double (*getduration)(TIM_RouteTypeDef Route);
 	u8 _num;
 }InputCatchManagerTypeDef; 
 

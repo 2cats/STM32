@@ -1,5 +1,8 @@
 #include "millis.h"
 #include "delay.h"
+/************/
+//功能：返回运行时间ms
+
 void PWR_BackupAccessCmd(FunctionalState NewState);
 void(*defaultDoSomeThing)(void);
 //LSE : 32.768KHZ

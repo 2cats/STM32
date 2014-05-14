@@ -26,11 +26,11 @@ Example:
 /**********WARNING************/
 /*
 	isTransferDoneÊôÐÔ
-		ÔÚDMA´«ÊäÍê³ÉÖÐ¶ÏÖÐ±»ÖÃÎ»£¬ÐèÊÖ¶¯ÇåÁã£¬²»¹ýÃ¿´Îµ÷ÓÃstartTransferÇ°£¬»áÏÈÇåÁã
+		ÔÚDMA´«ÊäÍê³ÉÖÐ¶ÏÖÐ±»ÖÃÎ»£¬ÐèÊÖ¶¯ÇåÁã£¬²»¹ýÃ¿´Îµ÷ÓÃstartTransferÇ°£¬»áÏÈÇåÁã£¬Èô³õÊ¼»¯Ê±Ö¸¶¨Á¬Ðø×ª»»£¬¸ÃÊôÐÔÒâÒå²»´ó
 	ÄÚ²¿µçÑ¹²Î¿¼µçÑ¹CH17 & ÄÚ²¿ÎÂ¶È´«¸ÐÆ÷CH16  Ê¹ÓÃÈçExampleÖÐËùÊ¾£¬ÓëÆÕÍ¨Í¨µÀÊ¹ÓÃ·½·¨ÏàÍ¬
 		ÄÚ²¿µçÑ¹²Î¿¼µçÑ¹µäÐÍÖµ:1.2V  Vref=RAWDATA*(3.3/4096)
 		ÄÚ²¿ÎÂ¶È´«¸ÐÆ÷ÎÂ¶È×ª»»¹«Ê½£º temperature=(1.43-RAWDATA*(3.3/4096))/0.0043+25
-	¬
+
 */
 //variables
 /***********************/

@@ -7,50 +7,31 @@
 #include "filter.h"
 #include "usmart.h"
 #include "USART2BufReceiever.h" 
-#define PID_MAX	(1-MOTOR_DEAD_LINE)
-#define PID_INTERVAL 10
-ComplementaryFilterTypeDef ComplementaryFilter;
-double PWMcontol_L,PWMcontol_R;
-double PID_input,PID_output,PID_target=VIRTICAL_ANGLE;
-USART2BufReceieverTypeDef USART2BufReceiever;
-PIDTypeDef PID;
-MPUDataTypeDef_T sensorData;
-void balanceProc(void)
-{
-  if(PID.Compute())//用角速度作为微分项进行PID运算
-	{
-		WriteLRMotors(PID_output+PWMcontol_L,PID_output+PWMcontol_R);
-		MPU6050_GetTransformedData(&sensorData);
-		PID_input=ComplementaryFilter.getAngle( sensorData.accx,  sensorData.gyroy,  PID_INTERVAL/1000.0);
-	}
-}
-void PIDConfigure()
-{
-	PID_Structure_Init(2,15,0.04,PID_INTERVAL,&PID);//10msPID计算周期2 40.02 //dead:0.15 12.11v     2,25,0.03
-	PID.SetIOT(&PID_input,&PID_output,&PID_target);//IOT的值均可在函数外任意修改
-	PID.SetOutputLimits(-PID_MAX,PID_MAX);
-}
-void All_Init()
-{
-	delay_init();
-  uart_init(115200);
-	MPU6050_ALL_Initialize();
-	Motor_Init();
-	PIDConfigure();
-	MILLIS_Init();
-	MPU6050_GetTransformedData(&sensorData);
-	ComplementaryFilter_Init(&ComplementaryFilter,2,0.9);
-	uart2_init_BR(115200,&USART2BufReceiever);
-}
- 
+#include "InputCatcher.h"
+#include "HX711.h"
+#include "gui.h"
+#include "24cxx.h" 
+#include "HX711.h"
+#include "IRremote.h"
+#include "24l01.h"
+
 int main()
 {
-	All_Init();
+	u8 tmp_buf[33]={"aaabbbcccddd"};		 //最后一个字节用来存放字符串结束符
+	NRF24L01_Init(); 	
+	while(NRF24L01_Check())	//测试连接
+	{
+	}
+////////////////////////////////////////////////
+	NRF24L01_RX_Mode();	//接收模式
 	while(1)
 	{
-		balanceProc();
-		BT_Talk(); 
+			if(NRF24L01_RxPacket(tmp_buf)==0)
+			{
+					//..
+			}
 	}
+
 }
 
 
