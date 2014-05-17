@@ -147,7 +147,7 @@ u8 DS18B20_Init(void)
 	
  	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;				//PORTG.11 ÍÆÍìÊä³ö
  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		  
- 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+ 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
  	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
  	GPIO_SetBits(GPIOA,GPIO_Pin_11);    //Êä³ö1

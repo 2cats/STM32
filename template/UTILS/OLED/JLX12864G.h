@@ -5,7 +5,7 @@
 
 /**********CONFIGURE***************/
 
-//#define USING_UCGUI
+#define USING_UCGUI
 #define OLED_CMD_BUFFER_LEN  			200//printf单次最大输出长度
 
 /*********************************/
@@ -38,6 +38,7 @@ unsigned int OLED_GetPixelIndex(int x, int y);
 //2- 使用OLED_printf需勾选microLib
 #ifdef USING_UCGUI
 void OLED_printf (char *fmt, ...);//输出到当前UCGUI系统当前位置
+void OLED_printfAt (int x,int y,char *fmt, ...);//输出到当前UCGUI系统指定位置
 #else
 void OLED_printfAt(int x,int y,char *fmt, ...);//输出到第x行[1-8]，第y列[1-128](小字）
 #endif

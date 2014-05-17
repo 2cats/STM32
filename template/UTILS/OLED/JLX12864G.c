@@ -94,6 +94,23 @@ Example:
 //***********************************
 // IO口宏定义 使用时请修改成自己的
 //***********************************
+//#define OLED_rs		   4           //RS    
+//#define OLED_reset     5           //RST
+//#define OLED_cs        6           //CS
+//#define OLED_sid       7           //SDA数据
+//#define OLED_sclk      8           //CLK时钟
+
+//#define GPIO_rs       GPIO_Pin_4
+//#define GPIO_reset    GPIO_Pin_5
+//#define GPIO_cs       GPIO_Pin_6
+//#define GPIO_sid      GPIO_Pin_7
+//#define GPIO_sclk     GPIO_Pin_8
+
+//#define OLED_Port RCC_APB2Periph_GPIOA
+//#define OLED_GPIO GPIOA
+//#define set(bitx)	PAout(bitx)=1
+//#define clr(bitx) PAout(bitx)=0   //这几个口用同一个PORT的
+
 #define OLED_rs		   4           //RS    
 #define OLED_reset     5           //RST
 #define OLED_cs        6           //CS
@@ -106,11 +123,11 @@ Example:
 #define GPIO_sid      GPIO_Pin_7
 #define GPIO_sclk     GPIO_Pin_8
 
-#define OLED_Port RCC_APB2Periph_GPIOA
-#define OLED_GPIO GPIOA
+#define OLED_Port RCC_APB2Periph_GPIOC
+#define OLED_GPIO GPIOC
 
-#define set(bitx)	PAout(bitx)=1
-#define clr(bitx) PAout(bitx)=0   //这几个口用同一个PORT的
+#define set(bitx)	PCout(bitx)=1
+#define clr(bitx) PCout(bitx)=0   //这几个口用同一个PORT的
 
 void transfer_command_lcd(u8 data1);
 void transfer_data_lcd(u8 data1);
@@ -864,6 +881,21 @@ void OLED_printf (char *fmt, ...)
 	while ((i < OLED_CMD_BUFFER_LEN) && buffer[i])
 	{
 		GUI_DispChar(buffer[i++]);
+	}
+	va_end(arg_ptr);
+}
+void OLED_printfAt (int x,int y,char *fmt, ...)
+{
+	char buffer[OLED_CMD_BUFFER_LEN+1]={0};    
+	u8 i = 0;
+	va_list arg_ptr;
+	va_start(arg_ptr, fmt);  
+	vsnprintf(buffer, OLED_CMD_BUFFER_LEN+1, fmt, arg_ptr);
+	GUI_GotoXY(x,y);
+	while ((i < OLED_CMD_BUFFER_LEN) && buffer[i])
+	{
+		OLED_WriteChar(x,y,buffer[i++],0);
+		y=y+6;
 	}
 	va_end(arg_ptr);
 }

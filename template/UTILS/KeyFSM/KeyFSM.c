@@ -3,7 +3,7 @@
 #include "stm32f10x.h"
 /*************键盘状态机****************/
 /*
-   占用资源：
+  占用资源：
    		RTC	& 闹钟中断   （注意：doAfter_ms函数不可再作它用，millis()函数没影响）
 	注意：
 		  使用前调用 MILLIS_Init();  
@@ -11,10 +11,10 @@
 
 事件
 	Press				按键刚按下时触发：
-	Release				按键放开时触发	
+	Release			按键放开时触发	
 	Hold				按键按下保持时持续触发，可获得持续时长	
 	Click				Release后且double超时时触发
-	DoubleClick			Release后在doubleClickInterval内再次Release时触发
+	DoubleClick	Release后在doubleClickInterval内再次Release时触发
 Example:
 	
 	void doWhenRelease(struct KeyFSMType *self)
@@ -36,7 +36,7 @@ Example:
 	void doWhenPress(struct KeyFSMType *self)
 	{
 		printf("Press\n");
-	}  
+	}
 	KeyFSMTypeDef aKeyFSM;      
 	Key_FSM_Structure(&aKeyFSM,GPIOB,GPIO_Pin_0,250);//300表示双击的间隔等待时长（ms）
 	aKeyFSM.doWhenRelease=doWhenRelease;

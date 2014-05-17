@@ -162,19 +162,19 @@ void THB7128_ChangeFreq(u32 freq)
 	TIMX->ARR=1e6/freq;
 }
 
-void TIM2_IRQHandler(void)
-{
+//void TIM2_IRQHandler(void)
+//{
 
-    if (TIM_GetITStatus(TIMX, TIM_IT_Update) != RESET)
-    {
-        TIM_ClearITPendingBit(TIMX, TIM_IT_Update);
-        thb7128_pwm_count--;
-        if (thb7128_pwm_count == 0)
-        {
-            TIM_Cmd(TIMX, DISABLE);
-						if(thb7128_defaultDoWhenDone!=0)
-							thb7128_defaultDoWhenDone();
-        }
-    }
-}
+//    if (TIM_GetITStatus(TIMX, TIM_IT_Update) != RESET)
+//    {
+//        TIM_ClearITPendingBit(TIMX, TIM_IT_Update);
+//        thb7128_pwm_count--;
+//        if (thb7128_pwm_count == 0)
+//        {
+//            TIM_Cmd(TIMX, DISABLE);
+//						if(thb7128_defaultDoWhenDone!=0)
+//							thb7128_defaultDoWhenDone();
+//        }
+//    }
+//}
 

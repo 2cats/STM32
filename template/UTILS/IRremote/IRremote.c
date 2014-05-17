@@ -1,6 +1,6 @@
 #include "IRremote.h"
 #include <string.h>
- PWMManagerTypeDef PWMManager;
+static PWMManagerTypeDef PWMManager;
 static InputCatchManagerTypeDef InputCatchManager;
 static IR_RawDataTypeDef IR_RawData;
 
@@ -176,5 +176,7 @@ void IR_SendNEC(NEC_DataTypeDef *NEC_Data)
 	IR_SendByte(naddr);
 	IR_SendByte(cmd);
 	IR_SendByte(ncmd);
+	IRsend_mark(_1_SPACE_LEN);
+	IRsend_space(_1_MARK_LEN);	
 }
 

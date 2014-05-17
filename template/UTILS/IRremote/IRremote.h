@@ -11,10 +11,10 @@
 #define IR_RATIO	0.5
 
 //红外接收引脚，低电平表示有载波信号
-#define IR_RECV_CHANNEL	TIM4CHANNEL4
+#define IR_RECV_CHANNEL	TIM3CHANNEL4
 
 //红外发射引脚，不能和接收引脚使用同一个定时器
-#define IR_SEND_CHANNEL	TIM3CHANNEL1
+#define IR_SEND_CHANNEL	TIM4CHANNEL1
 #define IR_RECV_BUF_LEN	100
 
 /*--------------------------*/

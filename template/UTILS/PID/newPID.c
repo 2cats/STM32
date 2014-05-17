@@ -67,6 +67,7 @@ void PID_setIOT(double* Input, double* Output, double* target)
 	defaultPID->output=Output;
 	defaultPID->target=target;
 }
+double _error,_dInput,__PID_ITerm;
 unsigned char PID_Compute()
 {
 	unsigned long now,timeChange;
@@ -86,7 +87,13 @@ unsigned char PID_Compute()
 
 		/*Compute PID Output*/
 	  output = _PID_kp * error + _PID_ITerm- _PID_kd * dInput;
-
+		_error=error;
+		_PID_ITerm=_PID_ITerm;
+		_dInput=dInput;
+		if(output<-90)
+		{
+			_dInput+1;
+		}
 		if(output > defaultPID->outMax) output = defaultPID->outMax;
 		else if(output < defaultPID->outMin) output = defaultPID->outMin;
 		*defaultPID->output = output;
@@ -126,7 +133,7 @@ void PID_SetOutputLimits(double Min, double Max)
 }
 void PID_prepareM2A()
 {
-   _PID_ITerm = *defaultPID->output;//此处代码适用于：稳态时需输出  若稳态无需输出则直接_PID_ITerm=0
+   _PID_ITerm =0;// *defaultPID->output;//此处代码适用于：稳态时需输出  若稳态无需输出则直接_PID_ITerm=0
    _PID_lastInput = *defaultPID->input;
    if(_PID_ITerm > defaultPID->outMax) _PID_ITerm = defaultPID->outMax;
    else if(_PID_ITerm < defaultPID->outMin) _PID_ITerm = defaultPID->outMin;

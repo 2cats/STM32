@@ -22,6 +22,11 @@ void AT24CXX_Read(u16 ReadAddr,u8 *pBuffer,u16 NumToRead);   	//从指定地址开始读
 
 u8 AT24CXX_Check(void);  //检查器件
 void AT24CXX_Init(void); //初始化IIC
+
+#define TARGET_STORGE_ADDR	0
+#define TARGET_MIN_STORGE_ADDR	20
+#define TARGET_MAX_STORGE_ADDR	40
+
 #endif
 
 

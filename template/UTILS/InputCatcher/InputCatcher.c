@@ -403,16 +403,16 @@ void IRQ_HIGH_LOW(TIM_RouteTypeDef TIM_Route)
 }
 
 
-void TIM1_CC_IRQHandler(void)
-{ 
-	IRQHANDLE(TIM1CHANNEL1);
-//	IRQHANDLE_PWM(TIM1CHANNEL1);
-}
-void TIM1_UP_IRQHandler(void)
-{
-	TIM1_CC_IRQHandler();
-	TIM_ClearITPendingBit(filterTIM_Input(TIM1CHANNEL1),TIM_IT_Update); //清除中断标志位
-}
+//void TIM1_CC_IRQHandler(void)
+//{ 
+//	IRQHANDLE(TIM1CHANNEL1);
+////	IRQHANDLE_PWM(TIM1CHANNEL1);
+//}
+//void TIM1_UP_IRQHandler(void)
+//{
+//	TIM1_CC_IRQHandler();
+//	TIM_ClearITPendingBit(filterTIM_Input(TIM1CHANNEL1),TIM_IT_Update); //清除中断标志位
+//}
 //void TIM2_IRQHandler(void)
 //{ 
 //	IRQHANDLE(TIM2CHANNEL1); 
@@ -423,8 +423,8 @@ void TIM3_IRQHandler(void)
 	IRQHANDLE(TIM3CHANNEL1); 
 	TIM_ClearITPendingBit(filterTIM_Input(TIM3CHANNEL1),TIM_IT_Update); //清除中断标志位
 }
-void TIM4_IRQHandler(void)
-{ 
-	IRQHANDLE(TIM4CHANNEL1); 
-	TIM_ClearITPendingBit(filterTIM_Input(TIM4CHANNEL1),TIM_IT_Update); //清除中断标志位
-}
+//void TIM4_IRQHandler(void)
+//{ 
+//	IRQHANDLE(TIM4CHANNEL1); 
+//	TIM_ClearITPendingBit(filterTIM_Input(TIM4CHANNEL1),TIM_IT_Update); //清除中断标志位
+//}

@@ -115,12 +115,12 @@ unsigned long TIM_xillis(void)
 {
 	return DoEvery_xillis_count;
 }
-//void DO_EVERY_IRQ_Handler(void)
-//{
-//	if(defaultDoEvery!=0)
-//	{
-//		defaultDoEvery();
-//	}
-//	DoEvery_xillis_count++;
-//	DO_EVERY_TIM->SR&=~((uint16_t)1);
-//}
+void DO_EVERY_IRQ_Handler(void)
+{
+	if(defaultDoEvery!=0)
+	{
+		defaultDoEvery();
+	}
+	DoEvery_xillis_count++;
+	DO_EVERY_TIM->SR&=~((uint16_t)1);
+}

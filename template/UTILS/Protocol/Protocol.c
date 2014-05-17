@@ -1,6 +1,6 @@
 #include "Protocol.h"
-
-
+#include "mymath.h"
+#include "24cxx.h" 
 /******这是一个（串口）通信协议********/
 //使用时，自己填写对应的接收代码，解析代码，默认串口2中断接收（注意不可和环形缓冲器同时共用）
 
@@ -29,9 +29,35 @@ PT_PACKAGE_LENGTH 表示收到非空小格的个数(0 -> 10,建议不要将空小格放在数据包中间)
 
 //自实现函数<1>
 //解析收到的一个包
+
+/*
+	上位机修改温度格式：
+< COMMEND_CHANGE_T / [8byte] >
+double	<->	char
+All	13byte
+1-5	整数
+6-8	小数
+
+			MCU返回数据：
+温度：< DATA_TMP / [8byte] >
+速度：< DATA_SPD / [8byte] >
+功率：< DATA_POW / [8byte] >
+*/
+#define COMMEND_CHANGE_T	'_'
+#define DATA_TMP		1
+#define DATA_SPD		2
+#define DATA_POW		3
+extern double PID_target;
+extern volatile char DISP_Update;
 void PT_ParsePacket(void)
 {
 	//...
+	if(PT_FSM_BUF[0][0]==COMMEND_CHANGE_T)
+	{
+		PID_target=char2double(PT_FSM_BUF[1]);
+		DISP_Update=1;
+		AT24CXX_Write(TARGET_STORGE_ADDR,(u8*)&PID_target,sizeof(PID_target));
+	}
 	
 }
 //自实现函数<2>
@@ -100,7 +126,7 @@ void PT_IRq_Handler(void)
 				PT_FSM_PER_LEN[PT_FSM_STATE]==0?PT_PACKAGE_LENGTH++:PT_PACKAGE_LENGTH;
 			 	PT_FSM_BUF[PT_FSM_STATE][PT_FSM_PER_LEN[PT_FSM_STATE]++]=data;
 			}
-			if(PT_FSM_PER_LEN[PT_FSM_STATE]>=PT_PERDATA_BUF_SIZE)
+			if(PT_FSM_STATE!=PT_SM_IDLE&&PT_FSM_PER_LEN[PT_FSM_STATE]>=PT_PERDATA_BUF_SIZE)
 				PT_FSM_STATE=PT_SM_IDLE;
 		break;			
 	}
