@@ -1,0 +1,16 @@
+"..\newLib\config/Configure.h", line 126: Warning:  #1-D: last line of file ends without a newline
+  #endif
+        ^
+"..\newLib\timer/Timer.h", line 29: Warning:  #1-D: last line of file ends without a newline
+  #endif
+        ^
+"..\newLib\util/util.h", line 70: Warning:  #1-D: last line of file ends without a newline
+  #endif
+        ^
+"..\UTILS\usart\usart.h", line 52: Warning:  #1-D: last line of file ends without a newline
+  #endif
+        ^
+"main.cpp", line 39: Warning:  #1-D: last line of file ends without a newline
+  }
+   ^
+main.cpp: 5 warnings, 0 errors
