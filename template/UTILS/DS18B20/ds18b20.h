@@ -13,6 +13,9 @@
 //Copyright(C) 广州市星翼电子科技有限公司 2009-2019
 //All rights reserved									  
 //////////////////////////////////////////////////////////////////////////////////
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 ////////////////////////////////////////////////////////////////////
 //DS18B20_Init->config GPIO
@@ -53,6 +56,9 @@ u8 DS18B20_Read_Byte(void);//读出一个字节
 u8 DS18B20_Read_Bit(void);//读出一个位
 u8 DS18B20_Check(void);//检测是否存在DS18B20
 void DS18B20_Rst(void);//复位DS18B20    
+#ifdef __cplusplus
+}
+#endif
 #endif
 
 

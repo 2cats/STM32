@@ -1,11 +1,52 @@
-#ifndef __USART_H
-#define __USART_H
-#include "stdio.h"	
-#include "sys.h" 
-#define USART_REC_LEN  			200  	//定义最大接收字节数 200
-#define EN_USART1_RX 			0		//使能（1）/禁止（0）串口1接收中断
-//如果想串口中断接收，请不要注释以下宏定义
-void uart_init(u32 bound);
+#ifndef USARTT_H
+#define USARTT_H
+#include <stm32f10x.h>
+#include "util/util.h"
+#include "config/Configure.h"
+#define CMD_BUFFER_LEN 512
+#define DMA_BUFSIZE 512
+
+class  Usart
+{
+public :
+	Usart(USART_ConfBase&,int,void(*callback)(u8 data)=0);
+
+	bool write(uint8_t byte);
+	bool write(uint8_t *bytes,int len);
+	bool write(char const *bytes,int len);
+	void printf(char const *fmt, ...);
+
+	uint8_t dma_read();
+	bool dma_read(uint8_t *bytes,int len);
+	int dma_availableNum();
+
+	Usart& operator<<(char const*str);
+	Usart& operator<<(char c);
+	Usart& operator<<(unsigned char c);
+	Usart& operator<<(int32_t val);
+	Usart& operator<<(uint32_t val);
+	Usart& operator<<(int16_t val);
+	Usart& operator<<(uint16_t val);
+	Usart& operator<<(double val);
+	
+	void resume();
+	void pause();
+	void resumeDmaRead();
+	void pauseDmaRead();
+
+private:
+	void enableDmaRead();
+	void enableIRq();
+	USART_TypeDef *USARTx;
+	USART_ConfBase theConfig;
+	u8 USART_defaultBuf[DMA_BUFSIZE];
+
+//deprecated sync funcs
+	uint8_t read();
+	bool isDataAvailable();
+	bool isReadyToSend();
+	//u8 mode;
+};
+
+
 #endif
-
-

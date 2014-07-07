@@ -1,7 +1,8 @@
 #include "sys.h"
- 
-
+#include "stdarg.h"
+#include <stdio.h>
 #include "usart2.h"	 
+#include "stdarg.h"
 #define CMD_BUFFER_LEN  			200
 //USART2_TX PA2 
 //USART2_RX PA3 
@@ -92,7 +93,7 @@ void uart2_printf (char *fmt, ...)
 	char buffer[CMD_BUFFER_LEN+1];      // CMD_BUFFER_LEN长度自己定义吧
 	u8 i = 0;
 	va_list arg_ptr;
-	va_start(arg_ptr, fmt);  
+	 va_start(arg_ptr, fmt);  
 	vsnprintf(buffer, CMD_BUFFER_LEN+1, fmt, arg_ptr);
 	while ((i < CMD_BUFFER_LEN) && buffer[i])
 	{

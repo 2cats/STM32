@@ -25,6 +25,11 @@
 #define SPEED_STOP_WAIT_TIME	1000   //测速超时置0时间
 #define HEATER_FACTOR	3
 
-#define RESTRAINALARM_MAX(m)	(m=m>75?75:m);
+#define RESTRAINALARM_MAX(m)	(m=m>95?95:m);
 #define RESTRAINALARM_MIN(m)	(m=m<1?1:m);
 #define RESTRAINTARGET(m)			(m=m>90?30:m);(m=m<5?30:m);
+#define RESTRAIN_LH(L,H)			if(H<=L)\
+{\
+	H=80;\
+	L=10;\
+}

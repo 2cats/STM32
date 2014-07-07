@@ -1,6 +1,9 @@
 #ifndef _THB7128_H_
 #define _THB7128_H_
 #include "stm32f10x.h"
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 //Pin & Timer Using
 
@@ -37,5 +40,8 @@ void THB7128_PWM_Out(u32 count);
 u8   THB7128_IsLastDone(void);
 void THB7128_SetDoWhenDone(void(*)(void));
 void THB7128_NVIC_Configuration(void);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

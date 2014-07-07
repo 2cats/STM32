@@ -12,6 +12,9 @@
 //Copyright(C) 广州市星翼电子科技有限公司 2009-2019
 //All rights reserved
 ////////////////////////////////////////////////////////////////////////////////// 	 
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 //0,不支持ucos
 //1,支持ucos
@@ -68,6 +71,9 @@
 
 void NVIC_Configuration(void);
 
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

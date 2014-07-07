@@ -2,10 +2,12 @@
 #define _INPUTCATCHER_H_
 
 #include "stm32f10x.h"
-
+#ifdef __cplusplus
+ extern "C" {
+#endif
 /***********************************/
 //defines
-#define CATCHING_FLOW_SIZE	0x01
+#define CATCHING_FLOW_SIZE	0x20
 
 #define GETFLAG(x)   ((catchWhat_Flag>>x)&1)
 #define SETFLAG(x)   (catchWhat_Flag|=(1<<x))
@@ -98,10 +100,7 @@ void InputCatchManager_setDoWhenTimeout(TIM_RouteTypeDef Route ,	void (*func)(st
 void InputCatchManagerStructure(InputCatchManagerTypeDef *InputCatchManager);
 double InputCatchManager_getduration(TIM_RouteTypeDef Route);
 /**********************************/
-//IRQs
-void IRQ_HIGH_LOW(TIM_RouteTypeDef TIM_Route);
-void TIM1_CC_IRQHandler(void);
-void TIM2_IRQHandler(void);
-void TIM3_IRQHandler(void);
-void TIM4_IRQHandler(void);
+#ifdef __cplusplus
+}
+#endif
 #endif

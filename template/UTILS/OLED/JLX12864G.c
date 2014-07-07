@@ -6,8 +6,10 @@
 #include "sys.h"
 #include "delay.h"
 #include "JLX12864G.h"
-#include <stdarg.h>
-
+#include <string.h>
+#include "stdarg.h"
+#include "stdio.h"
+#include "stdlib.h"
 #ifdef USING_UCGUI
 u32 OLED_BUF[64][4];
 #endif
@@ -143,10 +145,6 @@ void OLED_Draw_Pic(u8 * p);
 void OLED_Init(void);
 void OLED_Clear(void);
 
-const u8 font_s[][6];
-const u8 font_l[][16];
-const u8 tsktsk[];
-const u8 font_hz_tongxgc[][16];
 
 //**********************************
 //功能：写一个字符

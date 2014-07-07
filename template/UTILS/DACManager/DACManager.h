@@ -3,6 +3,9 @@
 #include "stm32f10x.h"
 //PA4
 //12Œª”“∂‘∆Î
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 typedef struct DACManager
 {
@@ -11,4 +14,8 @@ typedef struct DACManager
  	void(*setValue)(uint16_t registerValue);
 }DACManagerTypeDef;
 void DACManager_Init_Enable(DACManagerTypeDef *DACManager);
+#ifdef __cplusplus
+}
+#endif
+
 #endif 

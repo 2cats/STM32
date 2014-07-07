@@ -1,6 +1,10 @@
 #ifndef _ADCMANAGER_H_
 #define _ADCMANAGER_H_
 #include "stm32f10x.h"
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 #define ADCMANAGER_ALL_INIT(ADCManager,ChannelsArray,isC) ADCManager.ADC_Channels=ChannelsArray;\
 	ADCManager.isContinus=isC;\
 	ADCManager.ADC_Channels_num=sizeof(ChannelsArray);\
@@ -23,4 +27,7 @@ uint16_t ADCManager_getData(uint8_t ADC_Channel);
 void ADC_DMA_Config(void);
 void ADCManager_Structure(ADCManagerTypeDef *ADCManager);
 void DMA1_Channel1_IRQHandler(void);
+#ifdef __cplusplus
+}
+#endif
 #endif

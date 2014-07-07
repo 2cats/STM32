@@ -3,6 +3,13 @@
 #include "PWMManager.h"
 #include "InputCatcher.h"
 #include "delay.h"
+
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+	 
 /********* Config **********/
 //IR_FREQ ，典型值：38000  【范围：使 72000000/IR_FREQ 在0-65536之间，不可太接近于0，即IR_FREQ不可过大】
 #define IR_FREQ	38000
@@ -60,4 +67,8 @@ char NEC_Parse(IR_RawDataTypeDef* rawData,NEC_DataTypeDef *NEC_Data);
 
 void IR_SendNEC(NEC_DataTypeDef *NEC_Data);
 /*--------------------------*/
+#ifdef __cplusplus
+}
+#endif
+
 #endif 

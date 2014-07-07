@@ -1,5 +1,9 @@
 #ifndef _MPU6050_h_
 #define _MPU6050_h_
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
 //2014_3_18
 //2CATS
 /*Interface£∫
@@ -451,6 +455,8 @@ void MPU6050_SetSleepModeStatus(unsigned char NewState);
 //≥ı ºªØMPU6050
 //extern void MPU6050_Inital(void);
 //void MPU6050_Inital2(void);  
-
+#ifdef __cplusplus
+}
+#endif
 #endif
 

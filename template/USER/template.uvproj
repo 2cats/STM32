@@ -12,13 +12,13 @@
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32F103RB</Device>
+          <Device>STM32F103ZE</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <Cpu>IRAM(0x20000000-0x20004FFF) IROM(0x8000000-0x801FFFF) CLOCK(8000000) CPUTYPE("Cortex-M3")</Cpu>
+          <Cpu>IRAM(0x20000000-0x2000FFFF) IROM(0x8000000-0x807FFFF) CLOCK(8000000) CPUTYPE("Cortex-M3")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
-          <StartupFile>"STARTUP\ST\STM32F10x\startup_stm32f10x_md.s" ("STM32 Medium Density Line Startup Code")</StartupFile>
-          <FlashDriverDll>UL2CM3(-O14 -S0 -C0 -N00("ARM Cortex-M3") -D00(1BA00477) -L00(4) -FO7 -FD20000000 -FC800 -FN1 -FF0STM32F10x_128 -FS08000000 -FL020000)</FlashDriverDll>
-          <DeviceId>4231</DeviceId>
+          <StartupFile>"STARTUP\ST\STM32F10x\startup_stm32f10x_hd.s" ("STM32 High Density Line Startup Code")</StartupFile>
+          <FlashDriverDll>UL2CM3(-O14 -S0 -C0 -N00("ARM Cortex-M3") -D00(1BA00477) -L00(4) -FO7 -FD20000000 -FC800 -FN1 -FF0STM32F10x_512 -FS08000000 -FL080000)</FlashDriverDll>
+          <DeviceId>4216</DeviceId>
           <RegisterFile>stm32f10x.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
@@ -104,11 +104,11 @@
           <SimDllName>SARMCM3.DLL</SimDllName>
           <SimDllArguments></SimDllArguments>
           <SimDlgDll>DARMSTM.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pSTM32F103RB</SimDlgDllArguments>
+          <SimDlgDllArguments>-pSTM32F103ZE</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
           <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>TARMSTM.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pSTM32F103RB</TargetDlgDllArguments>
+          <TargetDlgDllArguments>-pSTM32F103ZE</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -141,7 +141,7 @@
             <RestoreTracepoints>0</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>12</TargetSelection>
+          <TargetSelection>7</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -155,7 +155,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile>..\JLINK\jlink_dbg.ini</InitializationFile>
-            <Driver>STLink\ST-LINKIII-KEIL_SWO.dll</Driver>
+            <Driver>Segger\JL2CM3.dll</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -274,12 +274,12 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x5000</Size>
+                <Size>0x10000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x80000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -304,7 +304,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x80000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -329,7 +329,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x5000</Size>
+                <Size>0x10000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -357,7 +357,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\USER;..\LIB\inc;..\CORE;..\FATFS\src;..\FATFS\SPI;..\FATFS\SD;..\mpu6050\I2C_analog;..\mpu6050\mpu600;..\UTILS\delay;..\UTILS\Filter;..\UTILS\usart;..\UTILS\millis;..\UTILS\PID;..\UTILS\sys;..\UTILS\ADCManager;..\UTILS\EXTIManager;..\UTILS\InputCatcher;..\UTILS\USARTBufReceiever;..\UTILS\DS18B20;..\UTILS\PWMManager;..\UTILS\USART2BufReceiever;..\UTILS\usart2;..\UCGUI\LIB;..\probe;..\probe\inc;..\UCGUI\inc;..\UTILS\OLED;..\UTILS\KeyFSM;..\UltraProbe;..\UTILS\PID_AutoTune;..\UTILS\THB7128;..\UTILS\RTC;..\UTILS\Protocol;..\UTILS\NRF24L01;..\UTILS\spi;..\UTILS\LCD;..\UTILS\doEvery;..\UTILS\DACManager;..\UTILS\ServoManager;..\UTILS\SuperTask;..\UTILS\USMART;..\UTILS\HX711;..\UTILS\24CXX;..\UTILS\IRremote;..\UTILS\KeyScan;..\UTILS\math;..\UTILS\NewKeyScan</IncludePath>
+              <IncludePath>..\USER;..\LIB\inc;..\CORE;..\FATFS\src;..\FATFS\SPI;..\FATFS\SD;..\mpu6050\I2C_analog;..\mpu6050\mpu600;..\UTILS\delay;..\UTILS\Filter;..\UTILS\usart;..\UTILS\millis;..\UTILS\PID;..\UTILS\sys;..\UTILS\ADCManager;..\UTILS\EXTIManager;..\UTILS\InputCatcher;..\UTILS\USARTBufReceiever;..\UTILS\DS18B20;..\UTILS\PWMManager;..\UTILS\USART2BufReceiever;..\UTILS\usart2;..\UCGUI\LIB;..\probe;..\probe\inc;..\UCGUI\inc;..\UTILS\OLED;..\UTILS\KeyFSM;..\UltraProbe;..\UTILS\PID_AutoTune;..\UTILS\THB7128;..\UTILS\RTC;..\UTILS\Protocol;..\UTILS\NRF24L01;..\UTILS\spi;..\UTILS\LCD;..\UTILS\doEvery;..\UTILS\DACManager;..\UTILS\ServoManager;..\UTILS\SuperTask;..\UTILS\USMART;..\UTILS\HX711;..\UTILS\24CXX;..\UTILS\IRremote;..\UTILS\KeyScan;..\UTILS\math;..\UTILS\NewKeyScan;..\newLib;..\UCGUI\GUI\HARDWARE\LCD;..\UCGUI\GUI\GUI\Config;..\UCGUI\GUI\GUI\Core;..\UCGUI\GUI\GUI\LCDDriver;..\UCGUI\GUI\GUI\Widget;..\UCGUI\GUI\GUI\WM;..\libcstl;..\newLib\eGUI;..\UCGUI\GUI\HARDWARE\TOUCH</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -409,24 +409,24 @@
               <FilePath>.\stm32f10x_it.c</FilePath>
             </File>
             <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\main.c</FilePath>
+              <FileName>main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\main.cpp</FilePath>
             </File>
             <File>
-              <FileName>display.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\display.c</FilePath>
+              <FileName>GUI_main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\GUI_main.cpp</FilePath>
             </File>
             <File>
-              <FileName>btTalk.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\btTalk.c</FilePath>
+              <FileName>Events.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\..\..\..\Events.cpp</FilePath>
             </File>
             <File>
-              <FileName>LED.c</FileName>
+              <FileName>zshz.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\LED.c</FilePath>
+              <FilePath>.\zshz.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -494,26 +494,6 @@
               <FilePath>..\UTILS\sys\sys.c</FilePath>
             </File>
             <File>
-              <FileName>usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\UTILS\usart\usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>usart2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\UTILS\usart2\usart2.c</FilePath>
-            </File>
-            <File>
-              <FileName>USART2BufReceiever.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\UTILS\USART2BufReceiever\USART2BufReceiever.c</FilePath>
-            </File>
-            <File>
-              <FileName>USARTBufReceiever.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\UTILS\USARTBufReceiever\USARTBufReceiever.c</FilePath>
-            </File>
-            <File>
               <FileName>THB7128.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UTILS\THB7128\THB7128.c</FilePath>
@@ -524,16 +504,6 @@
               <FilePath>..\UTILS\RTC\rtc.c</FilePath>
             </File>
             <File>
-              <FileName>Protocol.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\UTILS\Protocol\Protocol.c</FilePath>
-            </File>
-            <File>
-              <FileName>doEvery.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\UTILS\doEvery\doEvery.c</FilePath>
-            </File>
-            <File>
               <FileName>DACManager.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UTILS\DACManager\DACManager.c</FilePath>
@@ -542,11 +512,6 @@
               <FileName>ServoManager.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UTILS\ServoManager\ServoManager.c</FilePath>
-            </File>
-            <File>
-              <FileName>SuperTask.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\UTILS\SuperTask\SuperTask.c</FilePath>
             </File>
             <File>
               <FileName>HX711.c</FileName>
@@ -564,19 +529,19 @@
               <FilePath>..\UTILS\IRremote\IRremote.c</FilePath>
             </File>
             <File>
-              <FileName>keyscan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\UTILS\KeyScan\keyscan.c</FilePath>
-            </File>
-            <File>
               <FileName>mymath.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UTILS\math\mymath.c</FilePath>
             </File>
             <File>
-              <FileName>NewKeyScan.c</FileName>
+              <FileName>ILI93xx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\UTILS\NewKeyScan\NewKeyScan.c</FilePath>
+              <FilePath>..\UCGUI\GUI\HARDWARE\LCD\ILI93xx.c</FilePath>
+            </File>
+            <File>
+              <FileName>touch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UCGUI\GUI\HARDWARE\TOUCH\touch.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -589,9 +554,9 @@
               <FilePath>..\CORE\core_cm3.c</FilePath>
             </File>
             <File>
-              <FileName>startup_stm32f10x_md.s</FileName>
+              <FileName>startup_stm32f10x_hd.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\CORE\startup_stm32f10x_md.s</FilePath>
+              <FilePath>..\CORE\startup_stm32f10x_hd.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -731,12 +696,107 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>LIB</GroupName>
+          <GroupName>newLib</GroupName>
+          <Files>
+            <File>
+              <FileName>MKeyScan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\newLib\MKeyScan\MKeyScan.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\usart\usart.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Configure.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\config\Configure.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>util.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\util\util.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Timer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\timer\Timer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>TimerChannel.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\timer\TimerChannel.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>UCGUI</GroupName>
           <Files>
             <File>
               <FileName>LCD.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>..\UCGUI\LIB\LCD.lib</FilePath>
+              <FilePath>..\UCGUI\GUI\OBJ\LCD.lib</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>eGUI</GroupName>
+          <Files>
+            <File>
+              <FileName>GObject.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\eGUI\GObject.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Menu.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\eGUI\Menu.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MenuWidget.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\eGUI\MenuWidget.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Message.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\eGUI\Message.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Rectangle.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\eGUI\Rectangle.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>TextView.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\eGUI\TextView.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>CheckBoxMenu.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\eGUI\CheckBoxMenu.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>NumInputMenu.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\eGUI\NumInputMenu.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>InteractiveMenu.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\eGUI\InteractiveMenu.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>StatusBar.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\eGUI\StatusBar.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>InputDevice.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\eGUI\InputDevice.cpp</FilePath>
             </File>
           </Files>
         </Group>

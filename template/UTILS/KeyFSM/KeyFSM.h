@@ -1,6 +1,11 @@
 #ifndef _KEYfsm_H_
 #define _KEYfsm_H_	 
 #include "stm32f10x.h"
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 #define  FSM_STATE1 1
 #define  FSM_STATE2 2
 #define  FSM_STATE3 3
@@ -37,9 +42,12 @@ typedef struct KeyFSMType
 	u8 _CLICK_NEENDING_CONFIRM;
 	u8  _PREVIOUS_OPERATION;
 }KeyFSMTypeDef;
+ void MILLIS_KEY_SCAN_THREAD(void);
 void Key_FSM_Structure(KeyFSMTypeDef* aKeyFSM,GPIO_TypeDef *GPIO,uint16_t GPIO_Pin,u32  doubleClickInterval);
 void Key_FSM_Handler(KeyFSMTypeDef* aKeyFSM);
-
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

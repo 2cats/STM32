@@ -1,6 +1,6 @@
 #include "sys.h"
 #include "delay.h"
-#include "usart.h"
+//#include "usart.h"
 #include "rtc.h" 		    
 /********INTERFACE**********/
 /*

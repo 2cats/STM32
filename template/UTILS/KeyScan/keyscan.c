@@ -4,14 +4,14 @@
  struct io_port key_output[4] = {
 {GPIOB, GPIO_Pin_5}, {GPIOB, GPIO_Pin_6},
 {GPIOB, GPIO_Pin_7}, {GPIOB, GPIO_Pin_9},
-
 };
 
-struct io_port key_input[3] = {
+struct io_port key_input[4] = {
 {GPIOB, GPIO_Pin_12}, {GPIOB, GPIO_Pin_13},
-{GPIOB, GPIO_Pin_14}, 
+{GPIOB, GPIO_Pin_14}, {GPIOB, GPIO_Pin_15},
 };
 
+void (*DoWhenMKTriggered)(char value)=0;
 
 void keyboard_init(void)
 {
@@ -132,7 +132,7 @@ char ScanKeyValue(void)
 	}
 	return 0xff;
 }
-void (*DoWhenMKTriggered)(char value)=0;
+
 void Scan_MatrixKey_Proc(void)
 {
 	switch(_Scan_Key_FSM)
@@ -156,6 +156,7 @@ void Scan_MatrixKey_Proc(void)
 			break;	
 	}
 }
-
-
-		
+void MKeyScan_RCC_Init()
+{
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB,ENABLE);
+}

@@ -1,5 +1,6 @@
 #include "delay.h"
 #include "sys.h"
+
 ////////////////////////////////////////////////////////////////////////////////// 	 
 //如果使用ucos,则包括下面的头文件即可.
 #if SYSTEM_SUPPORT_UCOS
@@ -135,7 +136,7 @@ void delay_us(u32 nus)
 //对72M条件下,nms<=1864 
 void delay_ms(u16 nms)
 {	 		  	  
-	u32 temp;		   
+	u32 temp;		
 	SysTick->LOAD=(u32)nms*fac_ms;//时间加载(SysTick->LOAD为24bit)
 	SysTick->VAL =0x00;           //清空计数器
 	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk ;          //开始倒数  
@@ -148,12 +149,6 @@ void delay_ms(u16 nms)
 	SysTick->VAL =0X00;       //清空计数器	  	    
 } 
 #endif
-
-
-
-
-
-
 
 
 

@@ -1,6 +1,9 @@
 #ifndef NEWPID_v1_h
 #define NEWPID_v1_h
 #include "millis.h"
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 #define LIBRARY_VERSION	1.0.1
 #define AUTOMATIC	1
@@ -44,5 +47,9 @@ void PID_SetSampleTime(int NewSampleTime);
 void PID_SetOutputLimits(double Min, double Max);
 void PID_SetMode(int Mode);
 void PID_SetDirection(int Direction);
+#ifdef __cplusplus
+}
+#endif
+
 #endif
 

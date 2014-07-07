@@ -2,6 +2,9 @@
 #define _MOTOR_H_
 #define PWMManagerNum 16
 #include "stm32f10x.h"
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 
 /************精度调节**************/
@@ -69,5 +72,8 @@ void PWMManagerStructure(PWMManagerTypeDef *PWMManager);
 void PWMManager_ProduceNewPWM(TIM_RouteTypeDef route,float frequency,float ratio);
 void PWMManager_changeRatio(TIM_RouteTypeDef route,float ratio);
 void PWMManager_changeFrequency(TIM_RouteTypeDef route,float frequency);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

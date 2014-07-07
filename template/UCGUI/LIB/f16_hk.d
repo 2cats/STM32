@@ -1,9 +1,0 @@
-..\..\lib\f16_hk.o: ..\ucGUI\Font\F16_HK.c
-..\..\lib\f16_hk.o: G:\TX\ARM\ARMCC\bin\..\include\stdio.h
-..\..\lib\f16_hk.o: ..\ucGUI\Core\GUI_FontIntern.h
-..\..\lib\f16_hk.o: ..\ucGUI\Core\GUI.h
-..\..\lib\f16_hk.o: ..\ucGUI\Core\GUI_ConfDefaults.h
-..\..\lib\f16_hk.o: ..\ucGUI\Config\GUIConf.h
-..\..\lib\f16_hk.o: ..\ucGUI\Core\GUIType.h
-..\..\lib\f16_hk.o: ..\ucGUI\Core\LCD.h
-..\..\lib\f16_hk.o: ..\ucGUI\Core\GUIVersion.h

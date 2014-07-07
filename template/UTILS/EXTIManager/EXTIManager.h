@@ -2,6 +2,9 @@
 #define _EXTIMANAGER_H_
 #include "stm32f10x.h"
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 //u32 KEYBINDING_FLAG; 
 //#define ISKEYBINDING(x) ((KEYBINDING_FLAG>>x)&1)
@@ -55,4 +58,7 @@ void EXTIManager_Structure(EXTIManagerTypeDef *EXTIManager);
 //		LED0=!LED0;
 //		LED1=!LED1; 
 //	}		 
+#ifdef __cplusplus
+}
+#endif
 #endif

@@ -23,27 +23,16 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h" 
-//#include "UltraProbe.h"
-#include "Protocol.h"
-#include "SuperTask.h"
+
 void NMI_Handler(void)
 {
 }
  
 void HardFault_Handler(void)
 {
-  /* Go to infinite loop when Hard Fault exception occurs */
-  while (1)
-  {
-  }
-}
 
-void USART2_IRQHandler(void)
-{
-	PT_IRq_Handler();
+  while (1);
 }
-
- 
 void MemManage_Handler(void)
 {
   /* Go to infinite loop when Memory Manage exception occurs */

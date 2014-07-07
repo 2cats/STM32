@@ -10,7 +10,7 @@ u8 CfgPN;
 u8 Key_Cmd_Value[8];
 u8 Key_Cmd_Length;
 int disp__i;
-#define CURVE_MAX_LEN	50
+
 GUI_POINT aPoints[CURVE_MAX_LEN];
 u8 curve_current_len;
 
@@ -22,7 +22,7 @@ extern double PID_output;
 extern double speed;
 extern double PID_alarm_MIN;
 extern double PID_alarm_MAX;
-
+extern u8 forceMANUAL;
 double  Curve_Per_Len;
 double _tmp;
 GUI_POINT curvePoints[CURVE_MAX_LEN];
@@ -151,6 +151,8 @@ u8 set_var(u8 Key_Value,double *x)
 	return 0;
 }
 
+u8 AccordingCurve;
+unsigned long curveStartTime;
 void FSM_Proc(u8 key)
 {
 	if(key!=0)
@@ -251,6 +253,7 @@ void FSM_Proc(u8 key)
 						{
 								PID_alarm_MIN=_tmp;
 								RESTRAINALARM_MIN(PID_alarm_MIN)
+								RESTRAIN_LH(PID_alarm_MIN,PID_alarm_MAX);
 								AT24CXX_Write(TARGET_MIN_STORGE_ADDR,(u8*)&PID_alarm_MIN,sizeof(PID_alarm_MIN));
 						}
 						break;
@@ -259,6 +262,7 @@ void FSM_Proc(u8 key)
 						{
 								PID_alarm_MAX=_tmp;	
   							RESTRAINALARM_MAX(PID_alarm_MAX)
+								RESTRAIN_LH(PID_alarm_MIN,PID_alarm_MAX);
 							 AT24CXX_Write(TARGET_MAX_STORGE_ADDR,(u8*)&PID_alarm_MAX,sizeof(PID_alarm_MAX));
 						}
 						break;
@@ -293,7 +297,7 @@ void FSM_Proc(u8 key)
 						}
 						break;
 					case MENU_SUB2:
-						
+
 						break;
 					case MENU_SUB3:
 						break;
@@ -324,10 +328,12 @@ void FSM_Proc(u8 key)
 				//输入的是加热功率
 					if(Key_Value==MENU_KEY_1)
 					{
+						forceMANUAL=1;
 						PID.SetMode(MANUAL);
 						SET_MENU(2,Key_Value-'0');
 					}else if(Key_Value==MENU_KEY_2)
 					{
+						forceMANUAL=0;
 						PID.SetMode(AUTOMATIC);
 						FSM_VAL=0;
 					}
@@ -337,6 +343,11 @@ void FSM_Proc(u8 key)
 				if(Key_Value==MENU_KEY_1||Key_Value==MENU_KEY_2||Key_Value==MENU_KEY_3)
 				{
 					SET_MENU(2,Key_Value-'0');
+				}
+				if(Key_Value==MENU_KEY_2)
+				{
+					AccordingCurve=1;
+					curveStartTime=millis();
 				}
 				break;
 		}
@@ -360,7 +371,7 @@ void dispIDLE(void)
 {
 	GUI_Clear();
 	OLED_printfAt(TARGET_POSI,1,"Target:%.2f         ",PID_target);
-	OLED_printfAt(INPUT_POSI,1,"Input:%.2f           ",PID_input);
+	OLED_printfAt(INPUT_POSI,1,"T-now:%.2f           ",PID_input);
 	disp_update_Heater();
 	disp_update_Speed(speed);
 	OLED_printfAt(ALARM_POSI,1,"Alarm:%.2f,%.2f",PID_alarm_MIN,PID_alarm_MAX);
@@ -368,8 +379,6 @@ void dispIDLE(void)
 //	GUI_SetTextMode(GUI_TM_REV);
 	OLED_printfAt(MENU_BAR_POSI,1,"1.ALM2.TMP3.POW4.PLOT");
 }
-
-
 
 
 void Display_Proc(void)
@@ -397,7 +406,7 @@ void Display_Proc(void)
 			OLED_printfAt(STATUS_BAR_POSI,1,"1.Input 2.Auto                 ");
 			break;
 		case DISP_MENU31:
-	 		OLED_printfAt(STATUS_BAR_POSI,1,"Input Pow:                 ");
+	 		OLED_printfAt(STATUS_BAR_POSI,1,"Input(%%):                 ");
 			if(Key_Cmd_Length>0)
 			{
 				OLED_printfAt(STATUS_BAR_POSI,64,"%d            ",getKeyMathValue());
@@ -427,7 +436,7 @@ void Display_Proc(void)
 			{
 		 		OLED_printfAt(disp__i+1,1,"%d. %8d%8d",disp__i+Curve_Top-1,aPoints[disp__i+Curve_Top-2].x,aPoints[disp__i+Curve_Top-2].y);
 			}
-			OLED_printfAt(8,1,"Press Y to Input");
+			OLED_printfAt(8,1,"Press OK to Input");
 			break;
 		case DISP_MENU42:
 			GUI_Clear();
@@ -454,14 +463,14 @@ void Display_Proc(void)
 		case DISP_MENU43:
 			break;
 		case DISP_MENU411:
-			OLED_printfAt(8,1,"Input Time:                 ");
+			OLED_printfAt(8,1,"Time(s):                 ");
 			if(Key_Cmd_Length>0)
 			{
 				OLED_printfAt(8,64,"%d    ",getValue());
 			}	
 			break;
 		case DISP_MENU4111:
-			OLED_printfAt(8,1,"Input TMP:                 ");
+			OLED_printfAt(8,1,"TMP:                 ");
 			if(Key_Cmd_Length>0)
 			{
 				OLED_printfAt(8,64,"%d    ",getKeyMathValue());

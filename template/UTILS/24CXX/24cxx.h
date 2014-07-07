@@ -1,6 +1,10 @@
 #ifndef __24CXX_H
 #define __24CXX_H
 #include "iic_analog.h"
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 #define AT24C01		127
 #define AT24C02		255
 #define AT24C04		511
@@ -26,6 +30,9 @@ void AT24CXX_Init(void); //≥ı ºªØIIC
 #define TARGET_STORGE_ADDR	0
 #define TARGET_MIN_STORGE_ADDR	20
 #define TARGET_MAX_STORGE_ADDR	40
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

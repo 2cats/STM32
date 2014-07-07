@@ -1,5 +1,8 @@
 #ifndef _FILTER_H_
 #define _FILTER_H_
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 
 //Ò»½×»¥²¹
@@ -51,5 +54,7 @@ void Kalman_setRmeasure(double newR_measure) ;
 double Kalman_getQangle(void);
 double Kalman_getQbias(void) ;
 double Kalman_getRmeasure(void) ;
-
+#ifdef __cplusplus
+}
+#endif
 #endif

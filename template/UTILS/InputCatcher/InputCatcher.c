@@ -21,7 +21,7 @@
 
 	建议频率范围：20Hz--100KHz	
 	
-	溢出时间=63*65536*分辨率（分辨率为1us时，溢出时间约为4s）
+	溢出时间=CATCHING_FLOW_SIZE*65536*分辨率（分辨率为1us,CATCHING_FLOW_SIZE=0X3F时，溢出时间约为4s）
 	注：分辨率就是捕获时间的最小区分单位，设置分辨率时，尽量能被72整除，极限分辨率为 1/72.0 us
 
 【单位】：
@@ -52,6 +52,8 @@
 		
 */
 /***********************************/
+
+
 //variables
 u32 TIM_CAPTURE_STA_VAL1_VAL2_VAL3[16][4];
 u32 catchWhat_Flag;
@@ -406,7 +408,6 @@ void IRQ_HIGH_LOW(TIM_RouteTypeDef TIM_Route)
 //void TIM1_CC_IRQHandler(void)
 //{ 
 //	IRQHANDLE(TIM1CHANNEL1);
-////	IRQHANDLE_PWM(TIM1CHANNEL1);
 //}
 //void TIM1_UP_IRQHandler(void)
 //{
@@ -428,3 +429,7 @@ void TIM3_IRQHandler(void)
 //	IRQHANDLE(TIM4CHANNEL1); 
 //	TIM_ClearITPendingBit(filterTIM_Input(TIM4CHANNEL1),TIM_IT_Update); //清除中断标志位
 //}
+
+
+
+

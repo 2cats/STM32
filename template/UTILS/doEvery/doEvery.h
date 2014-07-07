@@ -6,7 +6,7 @@
 /*******Config*******/
 //Only TIM1-TIM4 is supported
 #define DO_EVERY_TIM	TIM4
-#define DO_EVERY_IRQ_Handler TIM4_IRQHandler
+//#define DO_EVERY_IRQ_Handler TIM4_IRQHandler_OLD
 //TIM1_UP_IRQHandler
 //TIM2_IRQHandler
 //TIM3_IRQHandler

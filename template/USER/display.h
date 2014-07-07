@@ -46,7 +46,7 @@
 #define DISP_MENU412	0x020104
 
 #define DISP_MENU4111	0x01010104
-
+#define CURVE_MAX_LEN	50
 #define MENU_KEY_1	'1'
 #define MENU_KEY_2	'2'
 #define MENU_KEY_3	'3'
