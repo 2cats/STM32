@@ -1,3 +1,3 @@
-EasySTM32
+LibSTM32
 =========
 
