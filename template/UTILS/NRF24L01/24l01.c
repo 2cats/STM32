@@ -2,7 +2,9 @@
 #include "lcd.h"
 #include "delay.h"
 #include "spi.h"
-#include "usart.h"
+
+
+//24L01底层驱动
 /**
 Example:
 	u8 tmp_buf[33]={"aaabbbcccddd"};		 //最后一个字节用来存放字符串结束符
@@ -52,11 +54,11 @@ void NRF24L01_Init(void)
   
 //Pin IRQ
 	GPIO_InitStructure.GPIO_Pin  = NRF24L01_Pin_IRQ;   
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD; //PG8 输入  
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; //PG8 输入  
 	
 	GPIO_Init(NRF24L01_GPIO, &GPIO_InitStructure);
 
-			 
+
 
   SPI2_Init();    		//初始化SPI	 
  
@@ -149,11 +151,12 @@ u8 NRF24L01_Write_Buf(u8 reg, u8 *pBuf, u8 len)
 u8 NRF24L01_TxPacket(u8 *txbuf)
 {
 	u8 sta;
+	sta=NRF24L01_Read_Reg(STATUS);  //读取状态寄存器的值	 
  	SPI2_SetSpeed(SPI_BaudRatePrescaler_8);//spi速度为9Mhz（24L01的最大SPI时钟为10Mhz）   
 NRF24L01_CE_LOW
   	NRF24L01_Write_Buf(WR_TX_PLOAD,txbuf,TX_PLOAD_WIDTH);//写数据到TX BUF  32个字节
-NRF24L01_CE_HIGH//启动发送	   
-	while(READ_NRF24L01_IRQ!=0);//等待发送完成
+NRF24L01_CE_HIGH//启动发送	
+ 	while(READ_NRF24L01_IRQ!=0);//等待发送完成（可能失败或成功）
 	sta=NRF24L01_Read_Reg(STATUS);  //读取状态寄存器的值	   
 	NRF24L01_Write_Reg(WRITE_REG_NRF+STATUS,sta); //清除TX_DS或MAX_RT中断标志
 	if(sta&MAX_TX)//达到最大重发次数
@@ -189,6 +192,7 @@ u8 NRF24L01_RxPacket(u8 *rxbuf)
 //当CE变高后,即进入RX模式,并可以接收数据了		   
 void NRF24L01_RX_Mode(void)
 {
+		NRF24L01_ClearAllFlag();
 NRF24L01_CE_LOW  
   	NRF24L01_Write_Buf(WRITE_REG_NRF+RX_ADDR_P0,(u8*)RX_ADDRESS,RX_ADR_WIDTH);//写RX节点地址
 	  
@@ -197,7 +201,11 @@ NRF24L01_CE_LOW
   	NRF24L01_Write_Reg(WRITE_REG_NRF+RF_CH,40);	     //设置RF通信频率		  
   	NRF24L01_Write_Reg(WRITE_REG_NRF+RX_PW_P0,RX_PLOAD_WIDTH);//选择通道0的有效数据宽度 	    
   	NRF24L01_Write_Reg(WRITE_REG_NRF+RF_SETUP,0x0f);//设置TX发射参数,0db增益,2Mbps,低噪声增益开启   
-  	NRF24L01_Write_Reg(WRITE_REG_NRF+CONFIG, 0x0f);//配置基本工作模式的参数;PWR_UP,EN_CRC,16BIT_CRC,接收模式 
+  	NRF24L01_Write_Reg(WRITE_REG_NRF+CONFIG, 0x3f);//配置基本工作模式的参数;PWR_UP,EN_CRC,16BIT_CRC,开启RX中断
+	
+			NRF24L01_Write_Reg(FLUSH_TX,0xff);//清除TX FIFO寄存器 
+		NRF24L01_Write_Reg(FLUSH_RX,0xff);//清除RX FIFO寄存器 
+	
 NRF24L01_CE_HIGH //CE为高,进入接收模式 
 }						 
 //该函数初始化NRF24L01到TX模式
@@ -206,8 +214,12 @@ NRF24L01_CE_HIGH //CE为高,进入接收模式
 //当CE变高后,即进入RX模式,并可以接收数据了		   
 //CE为高大于10us,则启动发送.	 
 void NRF24L01_TX_Mode(void)
-{														 
-NRF24L01_CE_LOW	    
+{
+		NRF24L01_ClearAllFlag();	
+NRF24L01_CE_LOW	 
+		NRF24L01_Write_Reg(FLUSH_TX,0xff);//清除TX FIFO寄存器 
+		NRF24L01_Write_Reg(FLUSH_RX,0xff);//清除RX FIFO寄存器 
+	
   	NRF24L01_Write_Buf(WRITE_REG_NRF+TX_ADDR,(u8*)TX_ADDRESS,TX_ADR_WIDTH);//写TX节点地址 
   	NRF24L01_Write_Buf(WRITE_REG_NRF+RX_ADDR_P0,(u8*)RX_ADDRESS,RX_ADR_WIDTH); //设置TX节点地址,主要为了使能ACK	  
 
@@ -216,10 +228,58 @@ NRF24L01_CE_LOW
   	NRF24L01_Write_Reg(WRITE_REG_NRF+SETUP_RETR,0x1a);//设置自动重发间隔时间:500us + 86us;最大自动重发次数:10次
   	NRF24L01_Write_Reg(WRITE_REG_NRF+RF_CH,40);       //设置RF通道为40
   	NRF24L01_Write_Reg(WRITE_REG_NRF+RF_SETUP,0x0f);  //设置TX发射参数,0db增益,2Mbps,低噪声增益开启   
-  	NRF24L01_Write_Reg(WRITE_REG_NRF+CONFIG,0x0e);    //配置基本工作模式的参数;PWR_UP,EN_CRC,16BIT_CRC,接收模式,开启所有中断
+  	NRF24L01_Write_Reg(WRITE_REG_NRF+CONFIG,0x4e);    //配置基本工作模式的参数;PWR_UP,EN_CRC,16BIT_CRC,接收模式,不开所有中断
+	
 NRF24L01_CE_HIGH//CE为高,10us后启动发送
 }		  
-
-
-
-
+void NRF24L01_SetBit(u8 reg,u8 bit)
+{
+	u8 sta;
+	NRF24L01_CE_LOW	 
+	sta=NRF24L01_Read_Reg(reg);  //读取状态寄存器的值	
+	sta|=(1<<bit);
+	NRF24L01_Write_Reg(WRITE_REG_NRF+reg,sta); 
+	NRF24L01_CE_HIGH
+}
+void NRF24L01_ResetBit(u8 reg,u8 bit)
+{
+u8 sta;
+	NRF24L01_CE_LOW	 
+	sta=NRF24L01_Read_Reg(reg);  //读取状态寄存器的值	
+	sta&=(~(1<<bit));
+	NRF24L01_Write_Reg(WRITE_REG_NRF+reg,sta); 
+	NRF24L01_CE_HIGH
+}
+void NRF24L01_SetIRQ(u8 bit,u8 STATE)
+{
+	if(STATE)
+		NRF24L01_ResetBit(CONFIG,bit);//清0使能中断
+	else
+		NRF24L01_SetBit(CONFIG,bit);
+}
+void NRF24L01_ClearFlag(u8 bit)
+{
+	NRF24L01_SetBit(STATUS,bit);
+}
+void NRF24L01_ClearAllFlag()
+{
+	u8 sta;
+	NRF24L01_CE_LOW	 
+	sta=NRF24L01_Read_Reg(STATUS);  //读取状态寄存器的值	
+	sta|=0x70;
+	NRF24L01_Write_Reg(WRITE_REG_NRF+STATUS,sta); 
+	NRF24L01_CE_HIGH
+}
+u8 NRF24L01_GetBit(u8 reg,u8 bit)
+{
+	u8 sta; 
+	sta=NRF24L01_Read_Reg(reg);  //读取状态寄存器的值	
+	return  (sta>>bit)&0x01;
+}
+void NRF24L01_ClearAllFlag_MS()
+{
+	while((NRF24L01_Read_Reg(STATUS)&0x70))
+	{
+		NRF24L01_ClearAllFlag();
+	}
+}

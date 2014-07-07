@@ -357,7 +357,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\USER;..\LIB\inc;..\CORE;..\FATFS\src;..\FATFS\SPI;..\FATFS\SD;..\mpu6050\I2C_analog;..\mpu6050\mpu600;..\UTILS\delay;..\UTILS\Filter;..\UTILS\usart;..\UTILS\millis;..\UTILS\PID;..\UTILS\sys;..\UTILS\ADCManager;..\UTILS\EXTIManager;..\UTILS\InputCatcher;..\UTILS\USARTBufReceiever;..\UTILS\DS18B20;..\UTILS\PWMManager;..\UTILS\USART2BufReceiever;..\UTILS\usart2;..\UCGUI\LIB;..\probe;..\probe\inc;..\UCGUI\inc;..\UTILS\OLED;..\UTILS\KeyFSM;..\UltraProbe;..\UTILS\PID_AutoTune;..\UTILS\THB7128;..\UTILS\RTC;..\UTILS\Protocol;..\UTILS\NRF24L01;..\UTILS\spi;..\UTILS\LCD;..\UTILS\doEvery;..\UTILS\DACManager;..\UTILS\ServoManager;..\UTILS\SuperTask;..\UTILS\USMART;..\UTILS\HX711;..\UTILS\24CXX;..\UTILS\IRremote;..\UTILS\KeyScan;..\UTILS\math;..\UTILS\NewKeyScan;..\newLib;..\UCGUI\GUI\HARDWARE\LCD;..\UCGUI\GUI\GUI\Config;..\UCGUI\GUI\GUI\Core;..\UCGUI\GUI\GUI\LCDDriver;..\UCGUI\GUI\GUI\Widget;..\UCGUI\GUI\GUI\WM;..\libcstl;..\newLib\eGUI;..\UCGUI\GUI\HARDWARE\TOUCH</IncludePath>
+              <IncludePath>..\USER;..\LIB\inc;..\CORE;..\FATFS\src;..\FATFS\SPI;..\FATFS\SD;..\mpu6050\I2C_analog;..\mpu6050\mpu600;..\UTILS\delay;..\UTILS\Filter;..\UTILS\usart;..\UTILS\millis;..\UTILS\PID;..\UTILS\sys;..\UTILS\ADCManager;..\UTILS\EXTIManager;..\UTILS\InputCatcher;..\UTILS\USARTBufReceiever;..\UTILS\DS18B20;..\UTILS\PWMManager;..\UTILS\USART2BufReceiever;..\UTILS\usart2;..\UCGUI\LIB;..\probe;..\probe\inc;..\UCGUI\inc;..\UTILS\OLED;..\UTILS\KeyFSM;..\UltraProbe;..\UTILS\PID_AutoTune;..\UTILS\THB7128;..\UTILS\RTC;..\UTILS\Protocol;..\UTILS\NRF24L01;..\UTILS\spi;..\UTILS\LCD;..\UTILS\doEvery;..\UTILS\DACManager;..\UTILS\ServoManager;..\UTILS\SuperTask;..\UTILS\USMART;..\UTILS\HX711;..\UTILS\24CXX;..\UTILS\IRremote;..\UTILS\KeyScan;..\UTILS\math;..\UTILS\NewKeyScan;..\newLib;..\UCGUI\GUI\HARDWARE\LCD;..\UCGUI\GUI\GUI\Config;..\UCGUI\GUI\GUI\Core;..\UCGUI\GUI\GUI\LCDDriver;..\UCGUI\GUI\GUI\Widget;..\UCGUI\GUI\GUI\WM;..\libcstl;..\newLib\eGUI;..\UCGUI\GUI\HARDWARE\TOUCH;..\GUI\STemWin5.22;..\GUI\STemWin5.22\INC;..\GUI\LCD;..\GUI\TOUCH;..\GUI</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -529,14 +529,14 @@
               <FilePath>..\UTILS\math\mymath.c</FilePath>
             </File>
             <File>
-              <FileName>ILI93xx.c</FileName>
+              <FileName>24l01.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\UCGUI\GUI\HARDWARE\LCD\ILI93xx.c</FilePath>
+              <FilePath>..\UTILS\NRF24L01\24l01.c</FilePath>
             </File>
             <File>
-              <FileName>touch.c</FileName>
+              <FileName>spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\UCGUI\GUI\HARDWARE\TOUCH\touch.c</FilePath>
+              <FilePath>..\UTILS\spi\spi.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -723,15 +723,80 @@
               <FileType>8</FileType>
               <FilePath>..\newLib\timer\TimerChannel.cpp</FilePath>
             </File>
+            <File>
+              <FileName>Flash.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\Flash\Flash.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Buffer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\buffer\Buffer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Postman.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\postman\Postman.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>NRF.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\newLib\NRF\NRF.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>UCGUI</GroupName>
+          <GroupName>GUI</GroupName>
           <Files>
             <File>
-              <FileName>LCD.lib</FileName>
+              <FileName>ili93xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\LCD\ili93xx.c</FilePath>
+            </File>
+            <File>
+              <FileName>touch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\TOUCH\touch.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUI_X.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\STemWin5.22\GUI_X.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIConf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\STemWin5.22\GUIConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIConf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\GUI\STemWin5.22\GUIConf.h</FilePath>
+            </File>
+            <File>
+              <FileName>LCDConf_FlexColor_Template.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\STemWin5.22\LCDConf_FlexColor_Template.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUI_X_Touch_Analog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\GUI\STemWin5.22\GUI_X_Touch_Analog.c</FilePath>
+            </File>
+            <File>
+              <FileName>STemWin522_CM3_Keil.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>..\UCGUI\GUI\OBJ\LCD.lib</FilePath>
+              <FilePath>..\GUI\STemWin5.22\STemWin522_CM3_Keil.lib</FilePath>
+            </File>
+            <File>
+              <FileName>gui_touch.c</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\GUI\STemWin5.22\gui_touch.c</FilePath>
+            </File>
+            <File>
+              <FileName>mygui.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\GUI\mygui.cpp</FilePath>
             </File>
           </Files>
         </Group>

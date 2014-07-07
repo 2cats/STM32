@@ -14,7 +14,9 @@
 //All rights reserved									  
 //////////////////////////////////////////////////////////////////////////////////
 
-
+#ifdef __cplusplus
+ extern "C" {
+#endif
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //NRF24L01寄存器操作命令
 #define READ_REG_NRF        0x00  //读配置寄存器,低5位为寄存器地址
@@ -83,6 +85,9 @@
 #define TX_PLOAD_WIDTH  32  	//32字节的用户数据宽度
 #define RX_PLOAD_WIDTH  32  	//32字节的用户数据宽度
 									   	   
+#define MASK_RX_DR		6
+#define MASK_TX_DS		5
+#define MASK_MAX_RT		4
 
 void NRF24L01_Init(void);//初始化
 void NRF24L01_RX_Mode(void);//配置为接收模式
@@ -94,6 +99,16 @@ u8 NRF24L01_Write_Reg(u8 reg, u8 value);//写寄存器
 u8 NRF24L01_Check(void);//检查24L01是否存在
 u8 NRF24L01_TxPacket(u8 *txbuf);//发送一个包的数据
 u8 NRF24L01_RxPacket(u8 *rxbuf);//接收一个包的数据
+//void NRF24L01_SetIRQ(u8 bit,u8 STATE);
+void NRF24L01_ClearFlag(u8 bit);
+void NRF24L01_ClearAllFlag_MS();
+void NRF24L01_SetBit(u8 reg,u8 bit);
+void NRF24L01_ResetBit(u8 reg,u8 bit);
+void NRF24L01_ClearAllFlag();
+u8 NRF24L01_GetBit(u8 reg,u8 bit);
+#ifdef __cplusplus
+}
+#endif
 #endif
 
 

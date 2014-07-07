@@ -31,7 +31,9 @@ void NMI_Handler(void)
 void HardFault_Handler(void)
 {
 
-  while (1);
+//  while (1);
+	int x;
+	x++;
 }
 void MemManage_Handler(void)
 {

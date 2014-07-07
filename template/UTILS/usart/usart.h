@@ -3,23 +3,24 @@
 #include <stm32f10x.h>
 #include "util/util.h"
 #include "config/Configure.h"
+#include "stream/stream.h"
 #define CMD_BUFFER_LEN 512
 #define DMA_BUFSIZE 512
 
-class  Usart
+class  Usart:public Stream
 {
 public :
 	Usart(USART_ConfBase&,int,void(*callback)(u8 data)=0);
 
-	bool write(uint8_t byte);
-	bool write(uint8_t *bytes,int len);
-	bool write(char const *bytes,int len);
+	virtual bool write(uint8_t byte);
+	virtual bool write(uint8_t *bytes,int len);
+	virtual bool write(char const *bytes,int len);
+	virtual uint8_t read();
+	virtual bool read(uint8_t *bytes,int len);
+
+	virtual int available();
+
 	void printf(char const *fmt, ...);
-
-	uint8_t dma_read();
-	bool dma_read(uint8_t *bytes,int len);
-	int dma_availableNum();
-
 	Usart& operator<<(char const*str);
 	Usart& operator<<(char c);
 	Usart& operator<<(unsigned char c);
@@ -42,7 +43,7 @@ private:
 	u8 USART_defaultBuf[DMA_BUFSIZE];
 
 //deprecated sync funcs
-	uint8_t read();
+	uint8_t block_read();
 	bool isDataAvailable();
 	bool isReadyToSend();
 	//u8 mode;

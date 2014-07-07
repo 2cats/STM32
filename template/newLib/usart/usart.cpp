@@ -4,6 +4,46 @@
 #include "stdio.h"
 #include <stdarg.h>
 #include <string.h>
+/*
+串口1&2 C++封装
+构造函数分析：
+	若不提供中断回调函数，则默认使用DMA环形缓存
+	
+配合Postman：(DMA)
+Example:
+
+#include "usart/UsartA.h"
+#include "usart/UsartB.h"
+
+Postman *postman;
+void uart1_receive_proc()
+{
+	Package package;
+	while(postman->receive(&package))
+	{
+		switch(package.type)
+		{
+			case 0x99:
+			
+				break;
+			case 0x76:
+			
+				break;
+		}
+	}
+}
+
+
+	Usart usart1(USART1_Conf,9600);//创建 stream
+	Postman _postman(&usart1);//创建 postman
+	postman=&_postman;
+	Timer timer(TIM1_Conf);
+	timer.doEvery(10,uart1_receive_proc);//不断调用 postman.receive  ，判断并处理 package
+	
+速度测试：
+115200:	10	kb/s
+9600:		0.8	kb/s
+*/
 void(*USART_callback[3])(u8 data);
 int freeCir[3],currP[3];
 Usart::Usart(USART_ConfBase& conf,int baud,void(*callback)(u8 data)):USARTx(conf.USARTx),theConfig(conf)
@@ -127,7 +167,7 @@ void Usart::printf(char const *fmt, ...)
 	va_end(arg_ptr);
 }
 
-uint8_t Usart::read()
+uint8_t Usart::block_read()
 {
 	while(USART_GetFlagStatus(USARTx,USART_FLAG_RXNE)==RESET);
 	return  USARTx->DR;
@@ -195,26 +235,26 @@ Usart& Usart::operator<<(double val)
 }
 
 
-u8 Usart::dma_read(void)
+u8 Usart::read(void)
 {
-	if(!dma_availableNum())
+	if(!available())
 		return 0xff;
 	u8 tmp=USART_defaultBuf[currP[theConfig.id]%DMA_BUFSIZE];
 	currP[theConfig.id]++;
 	return tmp;
 }
-int Usart::dma_availableNum()
+int Usart::available()
 {
 	return freeCir[theConfig.id]+DMA_BUFSIZE-theConfig.DMA_Channel->CNDTR-currP[theConfig.id];
 }
-bool Usart::dma_read(uint8_t *bytes,int len)
+bool Usart::read(uint8_t *bytes,int len)
 {
 	int i;
-	if(dma_availableNum()<len)
+	if(available()<len)
 		return false;
 	for(i=0;i<len;i++)
 	{
-		bytes[i]=dma_read();
+		bytes[i]=read();
 	}
 	return true;
 }

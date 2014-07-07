@@ -1,29 +1,41 @@
-//#include "MKeyScan/MKeyScan.h"
+#include "usart.h"
 #include "delay.h"
-#include "timer/Timer.h"
-#include "InputCatcher.h"
-#include "millis.h"
-#include "util/util.h"
-#include "gui.h"
-#include "touch.h" 
-#include "WM.h"
-#include "MENU.h"
-#include "FRAMEWIN.h"
+#include "stdlib.h"
+#include "postman/Postman.h"
+#include "Timer/timer.h"
+#include "nrf/NRF.h"
+struct AA
+{
+	char x[1024];
+};
+AA aa;
+int count;
+int interg;
+Package package;
 
-void MainTask(void);
 int main()
 {
-
 	delay_init();
-	Timer timer4(TIM4_Conf);
-	TP_Init();
-	timer4.doEvery(10,GUI_TOUCH_Exec);
-	GUI_Init();
-	GUI_SetBkColor(GUI_RED);
-	GUI_Clear();
-	MainTask();
+
+	Usart usart1(USART1_Conf,9600);	
+	Postman postman(&usart1);
+
 	while(1)
 	{
-		GUI_Exec();
+		postman.send(detail(aa),0x96);
+		if(postman.receive(&package))
+		{
+			switch(package.type)
+			{
+				case 0x99:
+				
+					break;
+				case 0x76:
+				
+					break;
+			}
+		}
+		count++;
+		
 	}
 }
