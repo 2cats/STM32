@@ -3,7 +3,6 @@
 "..\output\jlink\stm32f10x_it.o"
 "..\output\jlink\main.o"
 "..\output\jlink\gui_main.o"
-"..\output\jlink\events.o"
 "..\output\jlink\zshz.o"
 "..\output\jlink\adcmanager.o"
 "..\output\jlink\delay.o"

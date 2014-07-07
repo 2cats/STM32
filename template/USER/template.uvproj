@@ -419,11 +419,6 @@
               <FilePath>.\GUI_main.cpp</FilePath>
             </File>
             <File>
-              <FileName>Events.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\..\..\..\..\Events.cpp</FilePath>
-            </File>
-            <File>
               <FileName>zshz.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\zshz.c</FilePath>
